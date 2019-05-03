@@ -67,7 +67,7 @@ public class UserServiceTest {
         Account expected = accountOf("juyoung", "password", email);
         given(accountRepository.findById(id)).willReturn(Optional.of(expected));
 
-        Account account = userService.findById(id);
+        AccountDto.Res account = userService.findById(id);
 
         assertThat(account).isNotNull();
         assertThat(account.getEmail()).isEqualTo(email);

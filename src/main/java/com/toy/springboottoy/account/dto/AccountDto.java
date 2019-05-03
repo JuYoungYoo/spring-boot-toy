@@ -2,10 +2,7 @@ package com.toy.springboottoy.account.dto;
 
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.Role;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -41,17 +38,18 @@ public class AccountDto {
 
         public Account toEntity() {
             return Account.builder()
-                    .userName(this.userName)
-                    .email(this.email)
-                    .password(this.password)
-                    .role(this.role)
-                    .mailYn(this.mailYn)
+                    .userName(userName)
+                    .email(email)
+                    .password(password)
+                    .role(role)
+                    .mailYn(mailYn)
                     .state(true)
                     .build();
         }
     }
 
     @Getter
+    @NoArgsConstructor
     public static class Res {
         private String userName;
         private String email;
@@ -70,6 +68,10 @@ public class AccountDto {
             this.role = role;
             this.mailYn = mailYn;
             this.state = state;
+        }
+
+        public static Res of(Account account){
+            return new Res(account.getUserName(), account.getEmail(), account.getRole(), account.isMailYn(), account.isState());
         }
     }
 }

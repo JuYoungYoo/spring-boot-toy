@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,7 +19,7 @@ public class Account {
     private long id;
     private String userName;
     private String password;
-    @Column(unique = true)
+    @Email @Column(unique = true)
     private String email;
     @Enumerated(value = EnumType.STRING)
     private Role role;

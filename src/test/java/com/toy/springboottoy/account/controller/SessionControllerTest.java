@@ -73,4 +73,6 @@ public class SessionControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("code").value(ACCOUNT_NOT_FOUND.getCode()));
     }
+
+
 }

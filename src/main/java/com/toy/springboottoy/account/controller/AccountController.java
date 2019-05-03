@@ -15,7 +15,6 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final UserService userService;
-//    private final ModelMapper modelMapper;
 
     public AccountController(UserService userService) {
         this.userService = userService;
@@ -31,7 +30,8 @@ public class AccountController {
 
     @GetMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Account getUser(@PathVariable final long id) {
+    public AccountDto.Res getUser(@PathVariable final long id) {
         return userService.findById(id);
     }
+
 }
