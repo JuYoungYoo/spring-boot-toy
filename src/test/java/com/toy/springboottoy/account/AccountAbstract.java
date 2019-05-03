@@ -6,19 +6,33 @@ import com.toy.springboottoy.account.dto.AccountDto;
 
 public class AccountAbstract {
 
+    public static Account getUser() {
+        return Account.builder()
+                .userName("juyoung")
+                .email("user@gmail.com")
+                .password("password")
+                .role(Role.USER)
+                .state(true)
+                .mailYn(true)
+                .build();
+    }
 
     public static AccountDto.SignUpReq accountReqOf(String userName, String email){
         String password = "password";
         Role role = Role.USER;
-        return accountReqOf(userName, password, email, true, true, role);
+        return accountReqOf(userName, password, email, true, role);
     }
 
     public static AccountDto.SignUpReq accountReqOf(String userName, String email, Role role){
         String password = "password";
-        return accountReqOf(userName, password, email, true, true, role);
+        return accountReqOf(userName, password, email, true, role);
     }
 
-    public static AccountDto.SignUpReq accountReqOf(String userName, String password, String email, Boolean mailYn, Boolean state, Role role){
+    public static AccountDto.SignUpReq accountReqOf(String userName,
+                                                    String password,
+                                                    String email,
+                                                    Boolean mailYn,
+                                                    Role role){
         return  AccountDto.SignUpReq.builder()
                 .userName(userName)
                 .password(password)

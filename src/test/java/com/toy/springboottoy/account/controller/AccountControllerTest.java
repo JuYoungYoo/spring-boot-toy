@@ -2,6 +2,7 @@ package com.toy.springboottoy.account.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.Role;
 import com.toy.springboottoy.account.dto.AccountDto;
 import com.toy.springboottoy.common.TestDescription;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,16 +20,20 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
 
+import static com.toy.springboottoy.account.AccountAbstract.accountReqOf;
+import static com.toy.springboottoy.account.AccountAbstract.getUser;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
-public class UserControllerTest {
+public class AccountControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,6 +53,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(signUpReq)))
+                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
@@ -60,73 +65,79 @@ public class UserControllerTest {
         mockMvc.perform(post("/api/account/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(signUpReq))
-        )
+                .content(objectMapper.writeValueAsString(signUpReq)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @TestDescription("요리사 회원가입 정상 데이터 받을 때 성공")
-    public void createAccount_for_chef_success() throws Exception {
-        AccountDto.SignUpReq newAccount = AccountDto.SignUpReq.builder()
-                .userName("chef")
-                .password("pass")
-                .email("chef@outlook.com")
-                .role(Role.CHEF)
-                .build();
+    public void createAccount_For_Chef_Success() throws Exception {
+        String userName = "chef";
+        Role role = Role.CHEF;
+        AccountDto.SignUpReq newAccount = accountReqOf(userName, "chef@outlook.com", role);
 
         mockMvc.perform(post("/api/account/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(newAccount)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("userName").value(Matchers.is("chef")))
-                .andExpect(jsonPath("role").value(Role.CHEF.name()))
-                .andDo(print())
-        ;
+                .andExpect(jsonPath("userName").value(Matchers.is(userName)))
+                .andExpect(jsonPath("role").value(role.name()));
     }
 
     @Test
     @TestDescription("유저 회원가입 정상 데이터 받을 때 성공")
-    public void createAccount_for_user_success() throws Exception {
-        AccountDto.SignUpReq newAccount = AccountDto.SignUpReq.builder()
-                .userName("juyoung")
-                .password("test")
-                .email("juyoung@gmail.com")
-                .role(Role.USER)
-                .build();
+    public void createAccount_For_User_Success() throws Exception {
+        AccountDto.SignUpReq newAccount = accountReqOf("test", "test@gmail.com", Role.USER);
 
         mockMvc.perform(post("/api/account/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(newAccount)))
-                .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").exists())
-                .andExpect(header().exists(HttpHeaders.LOCATION))
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("id").value(Matchers.not(0)))
-                .andExpect(jsonPath("role").value(Matchers.is(Role.USER.name())))
-        ;
+                .andExpect(jsonPath("role").value(Matchers.is(Role.USER.name())));
     }
 
-    // todo : Fail test - Exception 처리
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     @TestDescription("유저 이미 사용중인 이메일일 경우 계정생성 실패")
-    public void createAccount_for_user_fail() throws Exception {
-        AccountDto.SignUpReq newAccount = AccountDto.SignUpReq.builder()
-                .userName("juyoung")
-                .password("test")
-                .email("email@gmail.com")
-                .role(Role.USER)
-                .build();
+    public void createAccount_For_User_Fail() throws Exception {
+        Account existAccount = getUser();
+        AccountDto.SignUpReq signUpReq = accountReqOf(existAccount.getUserName(), existAccount.getEmail());
 
         mockMvc.perform(post("/api/account/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(newAccount)))
+                .content(objectMapper.writeValueAsString(signUpReq)))
                 .andDo(print())
-        ;
+                .andExpect(status().isBadRequest());
     }
 
+    @Test
+    @TestDescription("Id에 해당하는 유저정보를 반환한다")
+    public void getAccount_Info() throws Exception {
+        long id = 1L;
+        Account expected = getUser();
+
+        mockMvc.perform(get("/api/account/users/" +id)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("userName").value(expected.getUserName()))
+                .andExpect(jsonPath("email").value(expected.getEmail()))
+                .andExpect(jsonPath("role").value(expected.getRole().name()));
+    }
+
+    @Test
+    @TestDescription("Id에 해당하는 계정정보가 없을 시 실패한다")
+    public void getAccount_Not_Found() throws Exception {
+        long id = 9999L;
+
+        mockMvc.perform(get("/api/account/users/" +id)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 }
