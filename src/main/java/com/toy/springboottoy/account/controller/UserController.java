@@ -2,7 +2,7 @@ package com.toy.springboottoy.account.controller;
 
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.dto.AccountDto;
-import com.toy.springboottoy.account.service.AccountService;
+import com.toy.springboottoy.account.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.internal.Errors;
 import org.springframework.hateoas.MediaTypes;
@@ -17,28 +17,26 @@ import java.net.URI;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
-@RequestMapping(value = "/api/account", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/account/users", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 @RestController
-public class AccountController {
+public class UserController {
 
-
-    private final AccountService accountService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
-    public AccountController(AccountService accountService,
-                             ModelMapper modelMapper) {
-        this.accountService = accountService;
+    public UserController(UserService userService,
+                          ModelMapper modelMapper) {
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
     @PostMapping
-    public ResponseEntity createAccount(@RequestBody @Valid AccountDto accountDto, Errors errors){
-        if(errors.hasErrors()){
+    public ResponseEntity signUp(@RequestBody @Valid AccountDto.SignUpReq accountDto, Errors errors) {
+        if (errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-        Account account =  modelMapper.map(accountDto, Account.class);
-        Account newAccount = accountService.signUp(account);
-        URI uri = linkTo(AccountController.class).slash(newAccount.getId()).toUri();
-        return ResponseEntity.created(uri).body(account);
+        Account newAccount = userService.signUp(accountDto);
+        URI uri = linkTo(UserController.class).slash(newAccount.getId()).toUri();
+        return ResponseEntity.created(uri).body(newAccount);
     }
 }
