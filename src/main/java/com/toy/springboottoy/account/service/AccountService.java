@@ -5,23 +5,17 @@ import com.toy.springboottoy.account.dto.AccountDto;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
 import com.toy.springboottoy.account.exception.EmailDuplicationException;
 import com.toy.springboottoy.account.reepository.AccountRepository;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-;
-
 @Service
-public class UserService {
+public class AccountService {
 
-    private final ModelMapper modelMapper;
     private final AccountRepository accountRepository;
 
-    public UserService(ModelMapper modelMapper,
-                       AccountRepository accountRepository) {
-        this.modelMapper = modelMapper;
+    public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 

@@ -49,7 +49,7 @@ public class AccountControllerTest {
                 .role(Role.USER)
                 .build();
 
-        mockMvc.perform(post("/api/account/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(signUpReq)))
@@ -62,7 +62,7 @@ public class AccountControllerTest {
     public void createAccount_Bad_Request_Empty_Input() throws Exception {
         AccountDto.SignUpReq signUpReq = AccountDto.SignUpReq.builder().build();
 
-        mockMvc.perform(post("/api/account/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(signUpReq)))
@@ -76,7 +76,7 @@ public class AccountControllerTest {
         Role role = Role.CHEF;
         AccountDto.SignUpReq newAccount = accountReqOf(userName, "chef@outlook.com", role);
 
-        mockMvc.perform(post("/api/account/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(newAccount)))
@@ -90,7 +90,7 @@ public class AccountControllerTest {
     public void createAccount_For_User_Success() throws Exception {
         AccountDto.SignUpReq newAccount = accountReqOf("test", "test@gmail.com", Role.USER);
 
-        mockMvc.perform(post("/api/account/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(newAccount)))
@@ -105,7 +105,7 @@ public class AccountControllerTest {
         Account existAccount = getUser();
         AccountDto.SignUpReq signUpReq = accountReqOf(existAccount.getUserName(), existAccount.getEmail());
 
-        mockMvc.perform(post("/api/account/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(signUpReq)))
@@ -119,7 +119,7 @@ public class AccountControllerTest {
         long id = 1L;
         Account expected = getUser();
 
-        mockMvc.perform(get("/api/account/users/" +id)
+        mockMvc.perform(get("/api/users/" +id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
@@ -134,7 +134,7 @@ public class AccountControllerTest {
     public void getAccount_Not_Found() throws Exception {
         long id = 9999L;
 
-        mockMvc.perform(get("/api/account/users/" +id)
+        mockMvc.perform(get("/api/users/" +id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())

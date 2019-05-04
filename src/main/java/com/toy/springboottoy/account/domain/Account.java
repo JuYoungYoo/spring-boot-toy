@@ -17,19 +17,23 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(nullable = false)
     private String userName;
+    @Column(nullable = false)
     private String password;
-    @Email @Column(unique = true)
+    @Email
+    @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Role role;
     private boolean mailYn;
     private boolean state;
     @CreatedDate
-    @Column(name="created_at",updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
     @LastModifiedDate
-    @Column(name="update_at", updatable = false)
+    @Column(name = "update_at", updatable = false)
     private LocalDateTime updateAt;
 
     @Builder

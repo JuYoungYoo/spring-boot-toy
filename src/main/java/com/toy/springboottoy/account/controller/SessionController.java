@@ -6,7 +6,7 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping(value = "/api/account/session", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/session", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 @RestController
 public class SessionController {
 

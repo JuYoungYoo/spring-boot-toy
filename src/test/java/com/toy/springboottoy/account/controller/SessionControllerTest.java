@@ -45,7 +45,7 @@ public class SessionControllerTest {
                 .password(password)
                 .build();
 
-        mockMvc.perform(post("/api/account/session")
+        mockMvc.perform(post("/api/session")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(sessionDto)))
@@ -65,7 +65,7 @@ public class SessionControllerTest {
                 .email(email)
                 .password(password)
                 .build();
-        mockMvc.perform(post("/api/account/session")
+        mockMvc.perform(post("/api/session")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(sessionDto)))
