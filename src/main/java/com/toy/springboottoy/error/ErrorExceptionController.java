@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ErrorExceptionController {
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {

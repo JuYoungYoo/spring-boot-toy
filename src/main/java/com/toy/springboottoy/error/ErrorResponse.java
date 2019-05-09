@@ -13,7 +13,7 @@ public class ErrorResponse {
     private String message;
     private String code;
     private int status;
-    private List<FieldError> errors = new ArrayList<>();
+    private List<FieldError> errors;
 
     @Builder
     public ErrorResponse(String message, String code, int status, List<FieldError> errors) {
@@ -25,7 +25,7 @@ public class ErrorResponse {
         }else{
             this.errors = errors;
         }
-//        this.errors.addAll(errors);
+        this.errors.addAll(errors);
     }
 
     @Getter
