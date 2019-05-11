@@ -16,8 +16,8 @@ public class SessionService {
         this.accountRepository = accountRepository;
     }
 
-    public SessionDto.signInRes signIn(SessionDto.signInReq sessionDto) {
-        Optional<SessionDto.signInRes> findAccount = accountRepository.findByEmailAndPassword(sessionDto.getEmail(), sessionDto.getPassword());
+    public SessionDto.SignInRes signIn(SessionDto.SignInReq sessionDto) {
+        Optional<SessionDto.SignInRes> findAccount = accountRepository.findByEmailAndPassword(sessionDto.getEmail(), sessionDto.getPassword());
         findAccount.orElseThrow(() -> new AccountNotFoundException(sessionDto.getEmail()));
         // todo : login 처리 로직 security 추가
         return findAccount.get();

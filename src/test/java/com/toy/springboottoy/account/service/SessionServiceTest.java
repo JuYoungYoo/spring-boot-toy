@@ -31,11 +31,11 @@ public class SessionServiceTest {
     public void signIn_Success() {
         // given
         String email = "user@gmail.com";
-        SessionDto.signInReq existSessionSeq = SessionDto.signInReq.builder()
+        SessionDto.SignInReq existSessionSeq = SessionDto.SignInReq.builder()
                 .email(email)
                 .password("password")
                 .build();
-        SessionDto.signInRes expected = SessionDto.signInRes.builder()
+        SessionDto.SignInRes expected = SessionDto.SignInRes.builder()
                 .id(1)
                 .email(email)
                 .role(Role.USER)
@@ -44,7 +44,7 @@ public class SessionServiceTest {
         given(accountRepository.findByEmailAndPassword(any(), any())).willReturn(Optional.of(expected));
 
         // when
-        SessionDto.signInRes result = sessionService.signIn(existSessionSeq);
+        SessionDto.SignInRes result = sessionService.signIn(existSessionSeq);
 
         // then
         assertThat(result).isNotNull();
@@ -54,7 +54,7 @@ public class SessionServiceTest {
     @Test(expected = IllegalArgumentException.class)
     @TestDescription("등록된 계정이 아닌경우 에러")
     public void signIn_Fail() {
-        SessionDto.signInReq signInReq = SessionDto.signInReq.builder().build();
+        SessionDto.SignInReq signInReq = SessionDto.SignInReq.builder().build();
         given(accountRepository.findByEmailAndPassword(any(), any())).willReturn(Optional.empty());
         sessionService.signIn(signInReq);
     }

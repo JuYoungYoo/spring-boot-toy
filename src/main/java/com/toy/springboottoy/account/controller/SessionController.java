@@ -18,7 +18,7 @@ public class SessionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public SessionDto.signInRes signIn(@RequestBody SessionDto.signInReq signInReq) {
+    public SessionDto.SignInRes signIn(@RequestBody SessionDto.SignInReq signInReq) {
         return sessionService.signIn(signInReq);
     }
 

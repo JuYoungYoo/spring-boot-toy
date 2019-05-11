@@ -40,7 +40,7 @@ public class SessionControllerTest {
         String email = "user@gmail.com";
         String password = "password";
 
-        SessionDto.signInReq sessionDto = SessionDto.signInReq.builder()
+        SessionDto.SignInReq sessionDto = SessionDto.SignInReq.builder()
                 .email(email)
                 .password(password)
                 .build();
@@ -61,7 +61,7 @@ public class SessionControllerTest {
         String email = "nonEmail@gmail.com";
         String password = "password";
 
-        SessionDto.signInReq sessionDto = SessionDto.signInReq.builder()
+        SessionDto.SignInReq sessionDto = SessionDto.SignInReq.builder()
                 .email(email)
                 .password(password)
                 .build();

@@ -75,8 +75,8 @@ public class AccountRepositoryTest {
         String email = "user@gmail.com";
         String password = "password";
 
-        Optional<SessionDto.signInRes> findSessionRes = accountRepository.findByEmailAndPassword(email, password);
-        SessionDto.signInRes sessionRes = findSessionRes.get();
+        Optional<SessionDto.SignInRes> findSessionRes = accountRepository.findByEmailAndPassword(email, password);
+        SessionDto.SignInRes sessionRes = findSessionRes.get();
 
         assertThat(sessionRes.getEmail()).isEqualTo(email);
         assertThat(sessionRes.getRole()).isNotNull();
