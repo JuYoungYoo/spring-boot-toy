@@ -8,8 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 @SpringBootApplication
-@EntityScan(
-        basePackageClasses = {Jsr310JpaConverters.class},
+@EntityScan(basePackageClasses = {Jsr310JpaConverters.class},
         basePackages = {"com"})
 public class SpringBootToyApplication {
 

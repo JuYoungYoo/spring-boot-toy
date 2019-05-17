@@ -1,9 +1,7 @@
 package com.toy.springboottoy.account.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.toy.springboottoy.account.domain.Role;
-import com.toy.springboottoy.account.dto.SessionDto;
+import com.toy.springboottoy.account.model.SessionDto;
 import com.toy.springboottoy.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;

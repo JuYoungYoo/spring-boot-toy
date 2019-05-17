@@ -1,7 +1,7 @@
 package com.toy.springboottoy.account.reepository;
 
 import com.toy.springboottoy.account.domain.Account;
-import com.toy.springboottoy.account.dto.SessionDto;
+import com.toy.springboottoy.account.model.SessionDto;
 import com.toy.springboottoy.common.TestDescription;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,12 +34,13 @@ public class AccountRepositoryTest {
     @Test
     @TestDescription("계정생성 성공")
     public void saveAccount() {
-        String userName = account.getUserName();
+        String userName = account.getName();
         String email = account.getEmail();
 
         Account newAccount = accountRepository.save(account);
 
-        assertThat(newAccount.getUserName()).isEqualTo(userName);
+
+        assertThat(newAccount.getName()).isEqualTo(userName);
         assertThat(newAccount.getEmail()).isEqualTo(email);
     }
 

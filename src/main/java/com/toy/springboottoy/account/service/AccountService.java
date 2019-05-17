@@ -1,11 +1,10 @@
 package com.toy.springboottoy.account.service;
 
 import com.toy.springboottoy.account.domain.Account;
-import com.toy.springboottoy.account.dto.AccountDto;
+import com.toy.springboottoy.account.model.AccountDto;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
 import com.toy.springboottoy.account.exception.EmailDuplicationException;
 import com.toy.springboottoy.account.reepository.AccountRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

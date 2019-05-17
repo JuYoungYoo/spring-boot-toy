@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,7 +19,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(nullable = false)
-    private String userName;
+    private String name;
     @Column(nullable = false)
     private String password;
     @Email
@@ -27,8 +28,13 @@ public class Account {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Role role;
-    private boolean mailYn;
+    private boolean emailVerified;
     private boolean state;
+    private String providerId;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(value = EnumType.STRING)
+    private Set<AuthProvider> provider;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -37,17 +43,19 @@ public class Account {
     private LocalDateTime updateAt;
 
     @Builder
-    public Account(String userName,
+    public Account(String name,
                    String password,
                    String email,
                    Role role,
-                   boolean mailYn,
+                   boolean emailVerified,
+                   Set<AuthProvider> provider,
                    boolean state) {
-        this.userName = userName;
+        this.name = name;
         this.password = password;
         this.email = email;
         this.role = role;
-        this.mailYn = mailYn;
+        this.emailVerified = emailVerified;
+        this.provider = provider;
         this.state = state;
     }
 }

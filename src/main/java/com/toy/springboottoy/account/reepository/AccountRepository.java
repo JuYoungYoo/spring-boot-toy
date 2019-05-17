@@ -1,7 +1,7 @@
 package com.toy.springboottoy.account.reepository;
 
 import com.toy.springboottoy.account.domain.Account;
-import com.toy.springboottoy.account.dto.SessionDto;
+import com.toy.springboottoy.account.model.SessionDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

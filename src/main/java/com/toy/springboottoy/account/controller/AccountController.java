@@ -1,7 +1,7 @@
 package com.toy.springboottoy.account.controller;
 
 import com.toy.springboottoy.account.domain.Account;
-import com.toy.springboottoy.account.dto.AccountDto;
+import com.toy.springboottoy.account.model.AccountDto;
 import com.toy.springboottoy.account.service.AccountService;
 import org.modelmapper.internal.Errors;
 import org.springframework.hateoas.MediaTypes;

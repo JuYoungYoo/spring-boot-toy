@@ -1,6 +1,6 @@
 package com.toy.springboottoy.account.controller;
 
-import com.toy.springboottoy.account.dto.SessionDto;
+import com.toy.springboottoy.account.model.SessionDto;
 import com.toy.springboottoy.account.service.SessionService;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;

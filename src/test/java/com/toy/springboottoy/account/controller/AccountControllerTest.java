@@ -4,7 +4,7 @@ package com.toy.springboottoy.account.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.Role;
-import com.toy.springboottoy.account.dto.AccountDto;
+import com.toy.springboottoy.account.model.AccountDto;
 import com.toy.springboottoy.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -73,7 +73,7 @@ public class AccountControllerTest {
     @TestDescription("요리사 회원가입 정상 데이터 받을 때 성공")
     public void createAccount_For_Chef_Success() throws Exception {
         String userName = "chef";
-        Role role = Role.CHEF;
+        Role role = Role.MANAGER;
         AccountDto.SignUpReq newAccount = accountReqOf(userName, "chef@outlook.com", role);
 
         mockMvc.perform(post("/api/users")
@@ -103,7 +103,7 @@ public class AccountControllerTest {
     @TestDescription("유저 이미 사용중인 이메일일 경우 계정생성 실패")
     public void createAccount_For_User_Fail() throws Exception {
         Account existAccount = getUser();
-        AccountDto.SignUpReq signUpReq = accountReqOf(existAccount.getUserName(), existAccount.getEmail());
+        AccountDto.SignUpReq signUpReq = accountReqOf(existAccount.getName(), existAccount.getEmail());
 
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -124,7 +124,7 @@ public class AccountControllerTest {
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("userName").value(expected.getUserName()))
+                .andExpect(jsonPath("userName").value(expected.getName()))
                 .andExpect(jsonPath("email").value(expected.getEmail()))
                 .andExpect(jsonPath("role").value(expected.getRole().name()));
     }

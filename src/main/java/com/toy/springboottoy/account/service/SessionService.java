@@ -1,6 +1,6 @@
 package com.toy.springboottoy.account.service;
 
-import com.toy.springboottoy.account.dto.SessionDto;
+import com.toy.springboottoy.account.model.SessionDto;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
 import com.toy.springboottoy.account.reepository.AccountRepository;
 import org.springframework.stereotype.Service;

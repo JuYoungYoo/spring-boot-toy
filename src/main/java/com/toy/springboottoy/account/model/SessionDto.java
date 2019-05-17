@@ -1,4 +1,4 @@
-package com.toy.springboottoy.account.dto;
+package com.toy.springboottoy.account.model;
 
 import com.toy.springboottoy.account.domain.Role;
 import lombok.Builder;
