@@ -2,8 +2,8 @@ package com.toy.springboottoy.account.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toy.springboottoy.account.model.SessionDto;
+import com.toy.springboottoy.account.model.SignInRequest;
 import com.toy.springboottoy.common.TestDescription;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +11,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.toy.springboottoy.error.ErrorCode.ACCOUNT_NOT_FOUND;
+import static com.toy.springboottoy.security.model.JwtAuthenticationResponse.TOKEN_TYPE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,20 +39,25 @@ public class SessionControllerTest {
     public void signIn_By_Success() throws Exception {
         String email = "user@gmail.com";
         String password = "password";
+        SignInRequest signInRequest = getSignInRequest(email, password);
 
-        SessionDto.SignInReq sessionDto = SessionDto.SignInReq.builder()
-                .email(email)
-                .password(password)
-                .build();
-
-        mockMvc.perform(post("/api/session")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(sessionDto)))
+        mockMvc.perform(post("/session")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(signInRequest)))
                 .andDo(print())
-                .andExpect(jsonPath("id").value(Matchers.not(0)))
-                .andExpect(jsonPath("email").value(email))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("accessToken").exists())
+                .andExpect(jsonPath("tokenType").value(TOKEN_TYPE))
+                ;
+    }
+
+
+    private SignInRequest getSignInRequest(String email,
+                                           String password) {
+        return SignInRequest.builder()
+                    .email(email)
+                    .password(password)
+                    .build();
     }
 
     @Test

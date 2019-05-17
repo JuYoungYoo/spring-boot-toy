@@ -4,6 +4,7 @@ import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.model.AccountDto;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
 import com.toy.springboottoy.account.exception.EmailDuplicationException;
+import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.account.reepository.AccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Account signUp(AccountDto.SignUpReq dto) {
+    public Account signUp(SignUpRequest dto) {
         if (accountRepository.existsByEmail(dto.getEmail())) {
             throw new EmailDuplicationException(dto.getEmail());
         }

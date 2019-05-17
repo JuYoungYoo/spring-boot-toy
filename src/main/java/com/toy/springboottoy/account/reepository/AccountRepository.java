@@ -11,4 +11,6 @@ public interface AccountRepository extends JpaRepository <Account, Long>{
     Optional<SessionDto.SignInRes> findByEmailAndPassword(String email, String password);
 
     boolean existsByEmail(String email);
+
+    Optional<Account> findByEmail(String email);
 }

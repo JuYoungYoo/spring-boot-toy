@@ -4,6 +4,7 @@ import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.Role;
 import com.toy.springboottoy.account.model.AccountDto;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
+import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.account.reepository.AccountRepository;
 import com.toy.springboottoy.common.TestDescription;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class AccountServiceTest {
         String email = "juyoung@gmail.com";
         Role role = Role.USER;
 
-        AccountDto.SignUpReq account = accountReqOf(userName, email, role);
+        SignUpRequest account = accountReqOf(userName, email, role);
 
         given(accountRepository.existsByEmail(any())).willReturn(true);
         accountService.signUp(account);

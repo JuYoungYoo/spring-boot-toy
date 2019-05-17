@@ -20,13 +20,13 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @PostMapping
+    /*@PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Account signUp(@RequestBody @Valid AccountDto.SignUpReq accountDto,
                           Errors errors) {
         Account account = accountService.signUp(accountDto);
         return account;
-    }
+    }*/
 
     @GetMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)

@@ -1,58 +1,58 @@
 package com.toy.springboottoy.security;
 
 
-import com.toy.springboottoy.security.domain.Member;
-import com.toy.springboottoy.security.repository.MemberRepository;
+import com.toy.springboottoy.account.domain.Account;
+import com.toy.springboottoy.account.domain.Role;
+import com.toy.springboottoy.account.exception.EmailDuplicationException;
+import com.toy.springboottoy.account.model.SignUpRequest;
+import com.toy.springboottoy.account.reepository.AccountRepository;
+import com.toy.springboottoy.security.model.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomUserDetails implements UserDetailsService {
 
     @Autowired
-    private MemberRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public List<Member> findAll() {
-        return userRepository.findAll();
-    }
-
-    public Member save(Member member) {
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
-        return userRepository.save(member);
-    }
+    private AccountRepository accountRepository;
 
     @PostConstruct
     public void init(){
-        Member juyoung = userRepository.findByUsername("juyoung");
-        if(juyoung == null){
-            Member account = new Member();
-            account.setUsername("juyoung");
-            account.setPassword("pass");
-            Member newAccount = this.save(account);
+        String username = "juyoung";
+
+        Optional<Account> account = accountRepository.findByEmail(username);
+        if(account.isPresent()){
+
+            SignUpRequest signUpRequest = SignUpRequest.builder()
+                    .name(username)
+                    .password("pass")
+                    .role(Role.USER)
+                    .emailVerified(false)
+                    .build();
+
+            Account newAccount = this.signUp(signUpRequest);
             System.out.println(newAccount);
         }
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member account = userRepository.findByUsername(username);
-        return new org.springframework.security.core.userdetails.User(account.getUsername(), account.getPassword(),getAuthorities());
+    public Account signUp(SignUpRequest dto) {
+        if (accountRepository.existsByEmail(dto.getEmail())) {
+            throw new EmailDuplicationException(dto.getEmail());
+        }
+        dto.encodePassword();
+        return accountRepository.save(dto.toEntity());
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Account account = accountRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+        return UserPrincipal.of(account);
     }
 }
