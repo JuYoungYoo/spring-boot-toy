@@ -1,3 +1,14 @@
 spring:
   profiles:
     active: local
+
+# security
+my-app:
+  auth:
+    jwt:
+      secret: HS123
+      expiration: 360000
+  admin-id: admin@email.com
+  admin-password: admin
+  user-id: user@email.com
+  user-password: user
