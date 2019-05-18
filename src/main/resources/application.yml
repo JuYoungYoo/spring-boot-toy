@@ -2,6 +2,10 @@ spring:
   profiles:
     active: local
 
+  devtools:
+    livereload:
+      enabled: true
+
 # security
 my-app:
   auth:
@@ -12,3 +16,4 @@ my-app:
   admin-password: admin
   user-id: user@email.com
   user-password: user
+

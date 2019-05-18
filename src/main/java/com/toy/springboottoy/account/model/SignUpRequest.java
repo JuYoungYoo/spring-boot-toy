@@ -20,9 +20,6 @@ import java.util.HashSet;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SignUpRequest {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     @NotEmpty
     private String name;
     @NotEmpty
@@ -46,8 +43,8 @@ public class SignUpRequest {
         this.emailVerified = emailVerified;
     }
 
-    public void encodePassword() {
-        this.password = passwordEncoder.encode(password);
+    public void encodePassword(PasswordEncoder passwordEncoder){
+       password = passwordEncoder.encode(password);
     }
 
     public Account toEntity() {
