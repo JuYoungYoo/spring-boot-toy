@@ -36,11 +36,21 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(JWT_SECRET_KEY).parseClaimsJws(token);
+            getClaimsJws(token);
             return true;
-        } catch (Exception ex) {
+        }catch (Exception e){
             return false;
         }
+    }
+
+    public long getUserIdFromToken(String token) {
+        return Long.parseLong(getClaimsJws(token).getBody().getSubject());
+    }
+
+    private Jws<Claims> getClaimsJws(String token) {
+        return Jwts.parser()
+                .setSigningKey(JWT_SECRET_KEY)
+                .parseClaimsJws(token);
     }
 
 }

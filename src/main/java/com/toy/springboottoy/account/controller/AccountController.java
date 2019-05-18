@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RequestMapping(value = "/api/users", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
+@RequestMapping(value = "/users", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 @RestController
 public class AccountController {
 
