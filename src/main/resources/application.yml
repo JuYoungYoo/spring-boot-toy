@@ -1,3 +1,19 @@
 spring:
   profiles:
     active: local
+
+  devtools:
+    livereload:
+      enabled: true
+
+# security
+my-app:
+  auth:
+    jwt:
+      secret: HS123
+      expirationInMs: 360000
+  admin-id: admin@email.com
+  admin-password: admin
+  user-id: user@email.com
+  user-password: user
+

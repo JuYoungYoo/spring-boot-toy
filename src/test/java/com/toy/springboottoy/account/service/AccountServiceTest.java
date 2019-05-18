@@ -2,8 +2,9 @@ package com.toy.springboottoy.account.service;
 
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.Role;
-import com.toy.springboottoy.account.dto.AccountDto;
+import com.toy.springboottoy.account.model.AccountDto;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
+import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.account.reepository.AccountRepository;
 import com.toy.springboottoy.common.TestDescription;
 import org.junit.Test;
@@ -23,10 +24,10 @@ import static org.mockito.BDDMockito.given;
 
 @ActiveProfiles("test")
 @RunWith(MockitoJUnitRunner.class)
-public class UserServiceTest {
+public class AccountServiceTest {
 
     @InjectMocks
-    private UserService userService;
+    private AccountService accountService;
     @Mock
     private AccountRepository accountRepository;
 
@@ -37,10 +38,10 @@ public class UserServiceTest {
         String email = "juyoung@gmail.com";
         Role role = Role.USER;
 
-        AccountDto.SignUpReq account = accountReqOf(userName, email, role);
+        SignUpRequest account = accountReqOf(userName, email, role);
 
         given(accountRepository.existsByEmail(any())).willReturn(true);
-        userService.signUp(account);
+        accountService.signUp(account);
     }
 
     @Test
@@ -53,9 +54,9 @@ public class UserServiceTest {
         given(accountRepository.existsByEmail(any())).willReturn(false);
         given(accountRepository.save(any())).willReturn(accountOf(userName, email, role));
 
-        Account newAccount = userService.signUp(accountReqOf(userName, email, role));
+        Account newAccount = accountService.signUp(accountReqOf(userName, email, role));
 
-        assertThat(newAccount.getUserName()).isEqualTo(userName);
+        assertThat(newAccount.getName()).isEqualTo(userName);
         assertThat(newAccount.getRole()).isEqualTo(role);
     }
 
@@ -67,7 +68,7 @@ public class UserServiceTest {
         Account expected = accountOf("juyoung", "password", email);
         given(accountRepository.findById(id)).willReturn(Optional.of(expected));
 
-        AccountDto.Res account = userService.findById(id);
+        AccountDto.Res account = accountService.findById(id);
 
         assertThat(account).isNotNull();
         assertThat(account.getEmail()).isEqualTo(email);
@@ -77,6 +78,6 @@ public class UserServiceTest {
     @TestDescription("id에 해당하는 계정이 없을 경우 에러")
     public void findById_Fail() {
         given(accountRepository.findById(any())).willReturn(Optional.empty());
-        userService.findById(1L);
+        accountService.findById(1L);
     }
 }

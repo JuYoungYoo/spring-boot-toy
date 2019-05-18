@@ -4,7 +4,8 @@ package com.toy.springboottoy.account.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.Role;
-import com.toy.springboottoy.account.dto.AccountDto;
+import com.toy.springboottoy.account.model.AccountDto;
+import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -43,13 +44,13 @@ public class AccountControllerTest {
     @Test
     @TestDescription("계정생성 시 잘못된 매개변수 들어올 시 실패한다")
     public void createAccount_Bad_Request_Wrong_Input() throws Exception {
-        AccountDto.SignUpReq signUpReq = AccountDto.SignUpReq.builder()
+        SignUpRequest signUpReq = SignUpRequest.builder()
                 .email("juyoung@gmail.com")
                 .password("password")
                 .role(Role.USER)
                 .build();
 
-        mockMvc.perform(post("/api/account/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(signUpReq)))
@@ -60,9 +61,9 @@ public class AccountControllerTest {
     @Test
     @TestDescription("계정생성 시 빈 객체 매개변수로 들어오면 실패한다")
     public void createAccount_Bad_Request_Empty_Input() throws Exception {
-        AccountDto.SignUpReq signUpReq = AccountDto.SignUpReq.builder().build();
+        SignUpRequest signUpReq = SignUpRequest.builder().build();
 
-        mockMvc.perform(post("/api/account/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(signUpReq)))
@@ -70,13 +71,13 @@ public class AccountControllerTest {
     }
 
     @Test
-    @TestDescription("요리사 회원가입 정상 데이터 받을 때 성공")
+    @TestDescription("관리자 회원가입 정상 데이터 받을 때 성공")
     public void createAccount_For_Chef_Success() throws Exception {
         String userName = "chef";
-        Role role = Role.CHEF;
-        AccountDto.SignUpReq newAccount = accountReqOf(userName, "chef@outlook.com", role);
+        Role role = Role.MANAGER;
+        SignUpRequest newAccount = accountReqOf(userName, "manage@outlook.com", role);
 
-        mockMvc.perform(post("/api/account/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(newAccount)))
@@ -88,9 +89,9 @@ public class AccountControllerTest {
     @Test
     @TestDescription("유저 회원가입 정상 데이터 받을 때 성공")
     public void createAccount_For_User_Success() throws Exception {
-        AccountDto.SignUpReq newAccount = accountReqOf("test", "test@gmail.com", Role.USER);
+        SignUpRequest newAccount = accountReqOf("test", "test@gmail.com", Role.USER);
 
-        mockMvc.perform(post("/api/account/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(newAccount)))
@@ -103,9 +104,9 @@ public class AccountControllerTest {
     @TestDescription("유저 이미 사용중인 이메일일 경우 계정생성 실패")
     public void createAccount_For_User_Fail() throws Exception {
         Account existAccount = getUser();
-        AccountDto.SignUpReq signUpReq = accountReqOf(existAccount.getUserName(), existAccount.getEmail());
+        SignUpRequest signUpReq = accountReqOf(existAccount.getName(), existAccount.getEmail());
 
-        mockMvc.perform(post("/api/account/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(signUpReq)))
@@ -119,12 +120,12 @@ public class AccountControllerTest {
         long id = 1L;
         Account expected = getUser();
 
-        mockMvc.perform(get("/api/account/users/" +id)
+        mockMvc.perform(get("/api/users/" +id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("userName").value(expected.getUserName()))
+                .andExpect(jsonPath("userName").value(expected.getName()))
                 .andExpect(jsonPath("email").value(expected.getEmail()))
                 .andExpect(jsonPath("role").value(expected.getRole().name()));
     }
@@ -134,7 +135,7 @@ public class AccountControllerTest {
     public void getAccount_Not_Found() throws Exception {
         long id = 9999L;
 
-        mockMvc.perform(get("/api/account/users/" +id)
+        mockMvc.perform(get("/api/users/" +id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())

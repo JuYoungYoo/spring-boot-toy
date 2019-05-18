@@ -1,25 +1,48 @@
 package com.toy.springboottoy.account.controller;
 
-import com.toy.springboottoy.account.dto.SessionDto;
-import com.toy.springboottoy.account.service.SessionService;
-import org.springframework.hateoas.MediaTypes;
+import com.toy.springboottoy.account.model.SignInRequest;
+import com.toy.springboottoy.security.CustomUserDetailsService;
+import com.toy.springboottoy.security.JwtTokenProvider;
+import com.toy.springboottoy.security.model.JwtAuthenticationResponse;
+import com.toy.springboottoy.security.model.UserPrincipal;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping(value = "/api/account/session", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
-@RestController
+@Controller
+@RequestMapping(value = "/session")
 public class SessionController {
 
-    private final SessionService sessionService;
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    AuthenticationManager authenticationManager;
+    @Autowired
+    CustomUserDetailsService customUserDetailsService;
 
-    public SessionController(SessionService sessionService) {
-        this.sessionService = sessionService;
+    @GetMapping
+    public String loginPage() {
+        return "login";
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public SessionDto.signInRes signIn(@RequestBody SessionDto.signInReq signInReq) {
-        return sessionService.signIn(signInReq);
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    public JwtAuthenticationResponse signIn(@RequestBody SignInRequest signInReq) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(signInReq.getEmail(), signInReq.getPassword());
+
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
+        String token = jwtTokenProvider.generateToken(userPrincipal);
+
+        return new JwtAuthenticationResponse(token);
     }
 
 }

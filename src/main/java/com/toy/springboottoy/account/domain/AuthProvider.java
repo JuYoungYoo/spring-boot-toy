@@ -1,6 +1,6 @@
 package com.toy.springboottoy.account.domain;
 
-public enum Role {
-    USER,
-    MANAGER
+public enum AuthProvider {
+    local,
+    google
 }
