@@ -1,7 +1,9 @@
 package com.toy.springboottoy.security;
 
+import com.toy.springboottoy.config.AppProperties;
 import com.toy.springboottoy.security.model.UserPrincipal;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -13,7 +15,6 @@ public class JwtTokenProvider {
 
     private static final String JWT_SECRET_KEY = "HS123";
     private static int jwtExpirationInMs = 604800000;
-
 
     public String generateToken(UserPrincipal userPrincipal) {
         Map<String, Object> claims = new HashMap<>();

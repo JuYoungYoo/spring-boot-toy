@@ -11,7 +11,7 @@ my-app:
   auth:
     jwt:
       secret: HS123
-      expiration: 360000
+      expirationInMs: 360000
   admin-id: admin@email.com
   admin-password: admin
   user-id: user@email.com

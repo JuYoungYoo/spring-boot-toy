@@ -1,4 +1,4 @@
-package com.toy.springboottoy.security.config;
+package com.toy.springboottoy.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
