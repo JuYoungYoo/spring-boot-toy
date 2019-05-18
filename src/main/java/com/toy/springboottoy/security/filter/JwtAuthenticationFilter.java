@@ -2,17 +2,12 @@ package com.toy.springboottoy.security.filter;
 
 import com.toy.springboottoy.security.CustomUserDetailsService;
 import com.toy.springboottoy.security.JwtTokenProvider;
-import com.toy.springboottoy.security.model.JwtAuthenticationResponse;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -20,6 +15,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.toy.springboottoy.security.model.JwtAuthenticationResponse.TOKEN_TYPE;
 
@@ -30,11 +27,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     CustomUserDetailsService customUserDetailsService;
 
+    // todo : jwt auth filter
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        List<String> excludeUrlPatterns = new ArrayList<>();
+        excludeUrlPatterns.add("/session");
+        excludeUrlPatterns.add("/");
+
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+
+        return excludeUrlPatterns.stream()
+                .anyMatch(p-> pathMatcher.match(p, request.getServletPath()));
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
         try {
             String authorization = request.getHeader("Authorization");
             String token = getAuthFromRequest(authorization);

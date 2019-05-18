@@ -1,5 +1,6 @@
 package com.toy.springboottoy.security.config;
 
+import com.toy.springboottoy.security.CustomAuthenticationEntryPoint;
 import com.toy.springboottoy.security.CustomUserDetailsService;
 import com.toy.springboottoy.security.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
+    @Bean
+    protected JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
+
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
@@ -64,18 +70,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .csrf().disable()
                     .cors().disable()
                     .httpBasic().disable()
+                .exceptionHandling()
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .and()
                 .authorizeRequests()
-                    .antMatchers("/session", "/token", "/error", "/", "/session")
+                    .antMatchers("/session", "/token", "/error", "/")
                         .permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
-
-
-    @Bean
-    protected JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
     }
 }
 
