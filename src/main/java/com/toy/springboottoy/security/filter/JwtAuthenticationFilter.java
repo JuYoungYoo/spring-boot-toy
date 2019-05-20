@@ -1,3 +1,4 @@
+/*
 package com.toy.springboottoy.security.filter;
 
 import com.toy.springboottoy.security.CustomUserDetailsService;
@@ -24,21 +25,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+
     @Autowired
     CustomUserDetailsService customUserDetailsService;
-
-    // todo : jwt auth filter
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        List<String> excludeUrlPatterns = new ArrayList<>();
-        excludeUrlPatterns.add("/session");
-        excludeUrlPatterns.add("/");
-
-        AntPathMatcher pathMatcher = new AntPathMatcher();
-
-        return excludeUrlPatterns.stream()
-                .anyMatch(p-> pathMatcher.match(p, request.getServletPath()));
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -73,3 +62,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return authorization.replace(TOKEN_TYPE, " ").trim();
     }
 }
+*/

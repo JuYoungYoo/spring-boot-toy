@@ -16,6 +16,10 @@ import java.util.Map;
 public class AppProperties {
 
     @NotEmpty
+    private String clientId;
+    @NotEmpty
+    private String clientSecret;
+    @NotEmpty
     private String adminId;
     @NotEmpty
     private String adminPassword;

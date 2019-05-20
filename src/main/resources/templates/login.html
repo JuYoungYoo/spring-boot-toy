@@ -9,7 +9,8 @@
 <h1>Login page</h1>
 <p>Example user: user / password</p>
 <p th:if="${loginError}" class="error">Wrong user or password</p>
-<form th:action="@{/sign-in}" method="post">
+<form th:action="@{/oauth/token}" method="post">
+
     <label for="username">Username</label>:
     <input type="text" id="username" name="username" autofocus="autofocus"/> <br/>
     <label for="password">Password</label>:
@@ -22,3 +23,11 @@
 </p>
 </body>
 </html>
+
+<script>
+    function obtainToken(){
+        $.ajax({
+
+        });
+    }
+</script>
