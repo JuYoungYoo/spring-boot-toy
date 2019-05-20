@@ -1,18 +1,12 @@
 package com.toy.springboottoy.config;
 
-import com.toy.springboottoy.security.CustomAuthenticationEntryPoint;
 import com.toy.springboottoy.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,15 +15,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import javax.xml.crypto.Data;
 
 @Configuration
 @EnableWebSecurity
-@EnableResourceServer
 //@EnableGlobalMethodSecurity(
 //        securedEnabled = true,
 //        jsr250Enabled = true,
@@ -77,9 +69,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .csrf().disable()
                     .cors().disable()
                     .httpBasic().disable()
-                .exceptionHandling()
-                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                    .authorizeRequests().anyRequest().authenticated()
                         .and()
-                .authorizeRequests().anyRequest().authenticated();
+                .oauth2Login()
+        ;
     }
 }

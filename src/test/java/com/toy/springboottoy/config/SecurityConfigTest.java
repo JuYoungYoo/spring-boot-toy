@@ -65,9 +65,13 @@ public class SecurityConfigTest {
         ;
     }
 
-    @Test @TestDescription("외부에서 토큰인증 성공")
-    public void another_resource_connected_token() {
-
+    @Test @TestDescription("토근 없을 시 접속 불가")
+    public void another_resource_connected_token() throws Exception {
+        mockMvc.perform(get("/users/1"))
+//                .header(HttpHeaders.AUTHORIZATION, null))
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+        ;
     }
 
     private String obtainToken(String userName, String password) throws Exception {

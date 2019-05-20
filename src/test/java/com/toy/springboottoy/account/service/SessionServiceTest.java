@@ -1,6 +1,6 @@
 package com.toy.springboottoy.account.service;
 
-import com.toy.springboottoy.account.domain.Role;
+import com.toy.springboottoy.account.domain.RoleType;
 import com.toy.springboottoy.account.model.SessionDto;
 import com.toy.springboottoy.account.reepository.AccountRepository;
 import com.toy.springboottoy.common.TestDescription;
@@ -38,7 +38,7 @@ public class SessionServiceTest {
         SessionDto.SignInRes expected = SessionDto.SignInRes.builder()
                 .id(1)
                 .email(email)
-                .role(Role.USER)
+                .roleType(RoleType.USER)
                 .state(true)
                 .build();
         given(accountRepository.findByEmailAndPassword(any(), any())).willReturn(Optional.of(expected));

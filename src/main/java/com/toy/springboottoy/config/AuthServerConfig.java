@@ -12,7 +12,6 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
-// 인증 서버 설정
 @Configuration
 @EnableAuthorizationServer
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {

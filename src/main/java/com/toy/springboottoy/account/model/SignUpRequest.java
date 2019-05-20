@@ -2,12 +2,11 @@ package com.toy.springboottoy.account.model;
 
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.AuthProvider;
-import com.toy.springboottoy.account.domain.Role;
+import com.toy.springboottoy.account.domain.RoleType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EnumType;
@@ -27,19 +26,19 @@ public class SignUpRequest {
     @NotEmpty
     private String email;
     @Enumerated(value = EnumType.STRING)
-    private Role role = Role.USER;
+    private RoleType roleType = RoleType.USER;
     private boolean emailVerified = true;
 
     @Builder
     public SignUpRequest(@NotEmpty String name,
                      @NotEmpty String password,
                      @NotEmpty String email,
-                     Role role,
+                     RoleType roleType,
                      boolean emailVerified) {
         this.name = name;
         this.password = password;
         this.email = email;
-        this.role = role;
+        this.roleType = roleType;
         this.emailVerified = emailVerified;
     }
 
@@ -52,7 +51,7 @@ public class SignUpRequest {
                 .name(name)
                 .email(email)
                 .password(password)
-                .role(role)
+                .roleType(roleType)
                 .emailVerified(emailVerified)
                 .state(true)
                 .provider(new HashSet<>(Arrays.asList(AuthProvider.local)))

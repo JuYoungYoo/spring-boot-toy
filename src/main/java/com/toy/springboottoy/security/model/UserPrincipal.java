@@ -26,7 +26,7 @@ public class UserPrincipal implements UserDetails {
     private boolean state;
 
     public static UserPrincipal of(Account account) {
-        List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_" + account.getRole().name()));
+        List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_" + account.getRoleType().name()));
 
         return new UserPrincipal(
                 account.getId(),

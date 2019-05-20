@@ -80,6 +80,6 @@ public class AccountRepositoryTest {
         SessionDto.SignInRes sessionRes = findSessionRes.get();
 
         assertThat(sessionRes.getEmail()).isEqualTo(email);
-        assertThat(sessionRes.getRole()).isNotNull();
+        assertThat(sessionRes.getRoleType()).isNotNull();
     }
 }

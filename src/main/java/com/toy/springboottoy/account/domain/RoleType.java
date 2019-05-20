@@ -1,6 +1,6 @@
 package com.toy.springboottoy.account.domain;
 
-public enum Role {
+public enum RoleType {
     USER,
     MANAGER
 }

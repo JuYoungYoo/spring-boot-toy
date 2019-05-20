@@ -2,8 +2,7 @@ package com.toy.springboottoy.account;
 
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.AuthProvider;
-import com.toy.springboottoy.account.domain.Role;
-import com.toy.springboottoy.account.model.AccountDto;
+import com.toy.springboottoy.account.domain.RoleType;
 import com.toy.springboottoy.account.model.SignUpRequest;
 
 import java.util.Arrays;
@@ -16,7 +15,7 @@ public class AccountAbstract {
                 .name("juyoung")
                 .email("user@gmail.com")
                 .password("password")
-                .role(Role.USER)
+                .roleType(RoleType.USER)
                 .state(true)
                 .emailVerified(true)
                 .provider(getAuthProviders(AuthProvider.local))
@@ -30,52 +29,52 @@ public class AccountAbstract {
     public static SignUpRequest accountReqOf(String userName,
                                              String email) {
         String password = "password";
-        Role role = Role.USER;
-        return accountReqOf(userName, password, email, true, role);
+        RoleType roleType = RoleType.USER;
+        return accountReqOf(userName, password, email, true, roleType);
     }
 
     public static SignUpRequest accountReqOf(String userName,
                                                     String email,
-                                                    Role role) {
+                                                    RoleType roleType) {
         String password = "password";
-        return accountReqOf(userName, password, email, true, role);
+        return accountReqOf(userName, password, email, true, roleType);
     }
 
     public static SignUpRequest accountReqOf(String userName,
                                                     String password,
                                                     String email,
                                                     Boolean mailYn,
-                                                    Role role) {
+                                                    RoleType roleType) {
         return SignUpRequest.builder()
                 .name(userName)
                 .password(password)
                 .email(email)
                 .emailVerified(mailYn)
-                .role(role)
+                .roleType(roleType)
                 .build();
     }
 
     public static Account accountOf(String userName,
                                     String password,
                                     String email) {
-        return setAccount(userName, password, email, Role.USER);
+        return setAccount(userName, password, email, RoleType.USER);
     }
 
     public static Account accountOf(String userName,
                                     String email,
-                                    Role role) {
-        return setAccount(userName, "password", email, role);
+                                    RoleType roleType) {
+        return setAccount(userName, "password", email, roleType);
     }
 
     private static Account setAccount(String userName,
                                       String password,
                                       String email,
-                                      Role role) {
+                                      RoleType roleType) {
         return Account.builder()
                 .name(userName)
                 .password(password)
                 .email(email)
-                .role(role)
+                .roleType(roleType)
                 .emailVerified(true)
                 .state(false)
                 .build();

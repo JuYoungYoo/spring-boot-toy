@@ -3,8 +3,7 @@ package com.toy.springboottoy.account.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toy.springboottoy.account.domain.Account;
-import com.toy.springboottoy.account.domain.Role;
-import com.toy.springboottoy.account.model.AccountDto;
+import com.toy.springboottoy.account.domain.RoleType;
 import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.common.TestDescription;
 import org.hamcrest.Matchers;
@@ -47,7 +46,7 @@ public class AccountControllerTest {
         SignUpRequest signUpReq = SignUpRequest.builder()
                 .email("juyoung@gmail.com")
                 .password("password")
-                .role(Role.USER)
+                .roleType(RoleType.USER)
                 .build();
 
         mockMvc.perform(post("/api/users")
@@ -74,8 +73,8 @@ public class AccountControllerTest {
     @TestDescription("관리자 회원가입 정상 데이터 받을 때 성공")
     public void createAccount_For_Chef_Success() throws Exception {
         String userName = "chef";
-        Role role = Role.MANAGER;
-        SignUpRequest newAccount = accountReqOf(userName, "manage@outlook.com", role);
+        RoleType roleType = RoleType.MANAGER;
+        SignUpRequest newAccount = accountReqOf(userName, "manage@outlook.com", roleType);
 
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -83,13 +82,13 @@ public class AccountControllerTest {
                 .content(objectMapper.writeValueAsString(newAccount)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("userName").value(Matchers.is(userName)))
-                .andExpect(jsonPath("role").value(role.name()));
+                .andExpect(jsonPath("roleType").value(roleType.name()));
     }
 
     @Test
     @TestDescription("유저 회원가입 정상 데이터 받을 때 성공")
     public void createAccount_For_User_Success() throws Exception {
-        SignUpRequest newAccount = accountReqOf("test", "test@gmail.com", Role.USER);
+        SignUpRequest newAccount = accountReqOf("test", "test@gmail.com", RoleType.USER);
 
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -97,7 +96,7 @@ public class AccountControllerTest {
                 .content(objectMapper.writeValueAsString(newAccount)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").value(Matchers.not(0)))
-                .andExpect(jsonPath("role").value(Matchers.is(Role.USER.name())));
+                .andExpect(jsonPath("role").value(Matchers.is(RoleType.USER.name())));
     }
 
     @Test
@@ -127,7 +126,7 @@ public class AccountControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("userName").value(expected.getName()))
                 .andExpect(jsonPath("email").value(expected.getEmail()))
-                .andExpect(jsonPath("role").value(expected.getRole().name()));
+                .andExpect(jsonPath("role").value(expected.getRoleType().name()));
     }
 
     @Test

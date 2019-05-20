@@ -1,6 +1,6 @@
 package com.toy.springboottoy.account.model;
 
-import com.toy.springboottoy.account.domain.Role;
+import com.toy.springboottoy.account.domain.RoleType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,18 +32,18 @@ public class SessionDto {
         @NotEmpty
         private String email;
         @NotEmpty
-        private Role role;
+        private RoleType roleType;
         @NotEmpty
         private boolean state;
 
         @Builder
         public SignInRes(@NotEmpty long id,
                          @NotEmpty String email,
-                         @NotEmpty Role role,
+                         @NotEmpty RoleType roleType,
                          @NotEmpty boolean state) {
             this.id = id;
             this.email = email;
-            this.role = role;
+            this.roleType = roleType;
             this.state = state;
         }
     }

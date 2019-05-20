@@ -1,7 +1,7 @@
 package com.toy.springboottoy.account.service;
 
 import com.toy.springboottoy.account.domain.Account;
-import com.toy.springboottoy.account.domain.Role;
+import com.toy.springboottoy.account.domain.RoleType;
 import com.toy.springboottoy.account.model.AccountDto;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
 import com.toy.springboottoy.account.model.SignUpRequest;
@@ -36,9 +36,9 @@ public class AccountServiceTest {
     public void duplicate_Email() {
         String userName = "juyoung";
         String email = "juyoung@gmail.com";
-        Role role = Role.USER;
+        RoleType roleType = RoleType.USER;
 
-        SignUpRequest account = accountReqOf(userName, email, role);
+        SignUpRequest account = accountReqOf(userName, email, roleType);
 
         given(accountRepository.existsByEmail(any())).willReturn(true);
         accountService.signUp(account);
@@ -49,15 +49,15 @@ public class AccountServiceTest {
     public void signUp_Success() {
         String userName = "juyoung";
         String email = "juyoung@gmail.com";
-        Role role = Role.USER;
+        RoleType roleType = RoleType.USER;
 
         given(accountRepository.existsByEmail(any())).willReturn(false);
-        given(accountRepository.save(any())).willReturn(accountOf(userName, email, role));
+        given(accountRepository.save(any())).willReturn(accountOf(userName, email, roleType));
 
-        Account newAccount = accountService.signUp(accountReqOf(userName, email, role));
+        Account newAccount = accountService.signUp(accountReqOf(userName, email, roleType));
 
         assertThat(newAccount.getName()).isEqualTo(userName);
-        assertThat(newAccount.getRole()).isEqualTo(role);
+        assertThat(newAccount.getRoleType()).isEqualTo(roleType);
     }
 
     @Test
