@@ -7,8 +7,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -23,18 +25,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class SecurityConfigTest {
 
     @Autowired
     MockMvc mockMvc;
     @Autowired
     AppProperties appProperties;
+    @Autowired
+    AuthProperties authProperties;
 
-    private String USER_NAME ;
+    private String CLIENT_ID;
+    private String CLIENT_SECRET;
+    private String USER_NAME;
     private String USER_PASSWORD;
 
     @Before
     public void setUp() {
+        CLIENT_ID = authProperties.getClientId();
+        CLIENT_SECRET = authProperties.getClientSecret();
         USER_NAME = appProperties.getUserId();
         USER_PASSWORD = appProperties.getUserPassword();
     }
@@ -42,9 +51,9 @@ public class SecurityConfigTest {
     @Test @TestDescription("토큰을 생성한다 ")
     public void login() throws Exception {
         mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(appProperties.getClientId(),appProperties.getClientSecret()))
-                .param("username", appProperties.getUserId())
-                .param("password", appProperties.getUserPassword())
+                .with(httpBasic(CLIENT_ID, CLIENT_SECRET))
+                .param("username", USER_NAME)
+                .param("password", USER_PASSWORD)
                 .param("grant_type", "password"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -71,7 +80,7 @@ public class SecurityConfigTest {
 
     private String obtainToken(String userName, String password) throws Exception {
         ResultActions perform = mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(appProperties.getClientId(),appProperties.getClientSecret()))
+                .with(httpBasic(CLIENT_ID, CLIENT_SECRET))
                 .param("username", userName)
                 .param("password", password)
                 .param("grant_type", "password"));

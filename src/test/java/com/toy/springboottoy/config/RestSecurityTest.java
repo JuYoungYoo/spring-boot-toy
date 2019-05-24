@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(SpringRunner.class)
@@ -23,6 +22,8 @@ public class RestSecurityTest {
 
     @Autowired
     AppProperties appProperties;
+    @Autowired
+    AuthProperties authProperties;
 
     @Before
     public void setup() {
@@ -71,7 +72,7 @@ public class RestSecurityTest {
         given()
                 .auth()
                     .preemptive()
-                        .basic(appProperties.getClientId(), appProperties.getClientSecret())
+                        .basic(authProperties.getClientId(), authProperties.getClientSecret())
                 .and()
                 .with().params(params)
                     .when()
@@ -91,7 +92,7 @@ public class RestSecurityTest {
                 given()
                         .auth()
                         .preemptive()
-                        .basic(appProperties.getClientId(), appProperties.getClientSecret())
+                        .basic(authProperties.getClientId(), authProperties.getClientSecret())
                         .and()
                         .with().params(params)
                         .when()

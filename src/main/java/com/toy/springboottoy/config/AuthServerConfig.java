@@ -36,7 +36,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    AppProperties appProperties;
+    AuthProperties authProperties;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -83,11 +83,13 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         // client 설정
         clients.inMemory()
-                .withClient(appProperties.getClientId())
+                .withClient(authProperties.getClientId())
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token")
                 .scopes("read", "write")
-                .secret(passwordEncoder.encode(appProperties.getClientSecret()))
+                .secret(passwordEncoder.encode(authProperties.getClientSecret()))
                 .accessTokenValiditySeconds(10 * 60) // 10 min
-                .refreshTokenValiditySeconds(6 * 10 * 60);
+                .refreshTokenValiditySeconds(6 * 10 * 60);;
+        ;
     }
+
 }

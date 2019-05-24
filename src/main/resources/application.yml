@@ -2,16 +2,6 @@ spring:
   profiles:
     active: local
 
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 434541373271-h977ssvpjlv003tdkfof6f49pqg8fsqr.apps.googleusercontent.com
-            client-secret: d9k1lSwtPwrfHBtpwrp-fTac
-            scope: email, profile
-            redirect-uri-template: "{baseUrl}/oauth2/callback/{registrationId}"
-
   devtools:
     livereload:
       enabled: true
@@ -19,11 +9,11 @@ spring:
 # security
 my-app:
   auth:
-    jwt:
+    client-id: myApp
+    client-secret: secret
+    jwt-info:
       secret: HS123
-      expirationInMs: 360000
-  clientId: myApp
-  clientSecret: secret
+      expiration-in-ms: 360000
   admin-id: admin@email.com
   admin-password: admin
   user-id: user@email.com
