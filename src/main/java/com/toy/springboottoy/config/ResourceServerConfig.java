@@ -10,18 +10,14 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
+
     @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources
-                .resourceId("account");
+    public void configure(final ResourceServerSecurityConfigurer resources) {
+        resources.resourceId("account");
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                    .mvcMatchers( "/users/**").authenticated()
-        ;
+        http.authorizeRequests().anyRequest().authenticated();
     }
 }
-

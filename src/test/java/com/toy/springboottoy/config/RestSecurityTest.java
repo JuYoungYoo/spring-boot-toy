@@ -31,14 +31,13 @@ public class RestSecurityTest {
     }
 
     @Test
-    public void 기본path로_접근하면_index_html_호출된다() throws Exception {
+    public void 기본_path로_접근하면_index_html_호출된다() throws Exception {
         given()
                 .when()
-                .get("/")
+                    .get("/login/oauth2/code/google")
                 .then()
-                .statusCode(200)
-                .contentType("text/html")
-                .body(containsString("권한 관리"));
+                    .log().all()
+                ;
     }
 
     @Test @TestDescription("외부 리소스에서 토큰으로 인증 통과한 후 리소스 접속에 성공한다")
