@@ -87,7 +87,7 @@
     - username
     - password
     - email
-    - role  : Role : USER, COOK
+    - roleType  : Role : USER, MANAGER
     - mail_yn : (optional) boolean
     - state : boolean
 

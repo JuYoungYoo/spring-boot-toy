@@ -13,8 +13,7 @@ import java.util.Set;
 @Getter
 @EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class
-Account {
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +27,7 @@ Account {
     private String email;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private Role role;
+    private RoleType roleType;
     private boolean emailVerified;
     private boolean state;
     private String providerId;
@@ -47,14 +46,14 @@ Account {
     public Account(String name,
                    String password,
                    String email,
-                   Role role,
+                   RoleType roleType,
                    boolean emailVerified,
                    Set<AuthProvider> provider,
                    boolean state) {
         this.name = name;
         this.password = password;
         this.email = email;
-        this.role = role;
+        this.roleType = roleType;
         this.emailVerified = emailVerified;
         this.provider = provider;
         this.state = state;

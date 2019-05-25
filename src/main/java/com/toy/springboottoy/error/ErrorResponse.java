@@ -25,7 +25,6 @@ public class ErrorResponse {
         }else{
             this.errors = errors;
         }
-        this.errors.addAll(errors);
     }
 
     @Getter

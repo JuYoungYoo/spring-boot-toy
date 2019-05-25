@@ -9,9 +9,11 @@ spring:
 # security
 my-app:
   auth:
-    jwt:
+    client-id: myApp
+    client-secret: secret
+    jwt-info:
       secret: HS123
-      expirationInMs: 360000
+      expiration-in-ms: 360000
   admin-id: admin@email.com
   admin-password: admin
   user-id: user@email.com

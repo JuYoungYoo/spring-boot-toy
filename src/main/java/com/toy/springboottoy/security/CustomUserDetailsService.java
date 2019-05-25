@@ -13,8 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -37,9 +35,4 @@ public class CustomUserDetailsService implements UserDetailsService {
         return UserPrincipal.of(account);
     }
 
-    public UserDetails loadUserByUserId(long id) {
-        Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new AccountNotFoundException(id));
-        return UserPrincipal.of(account);
-    }
 }

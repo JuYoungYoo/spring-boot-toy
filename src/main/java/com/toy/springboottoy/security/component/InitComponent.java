@@ -1,11 +1,10 @@
 package com.toy.springboottoy.security.component;
 
 
-import com.toy.springboottoy.account.domain.Role;
+import com.toy.springboottoy.account.domain.RoleType;
 import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.config.AppProperties;
 import com.toy.springboottoy.security.CustomUserDetailsService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -27,19 +26,19 @@ public class InitComponent implements ApplicationRunner {
     @Transactional
     @Override
     public void run(ApplicationArguments args) {
-        setFixtureAccount("admin", appProperties.getAdminId(), appProperties.getAdminPassword(), Role.MANAGER);
-        setFixtureAccount("user", appProperties.getUserId(), appProperties.getUserPassword(), Role.USER);
+        setFixtureAccount("admin", appProperties.getAdminId(), appProperties.getAdminPassword(), RoleType.MANAGER);
+        setFixtureAccount("user", appProperties.getUserId(), appProperties.getUserPassword(), RoleType.USER);
     }
 
     private void setFixtureAccount(String name,
                                    String email,
                                    String password,
-                                   Role role) {
+                                   RoleType roleType) {
         SignUpRequest account = SignUpRequest.builder()
                 .name(name)
                 .email(email)
                 .password(password)
-                .role(role)
+                .roleType(roleType)
                 .emailVerified(true)
                 .build();
         try {
