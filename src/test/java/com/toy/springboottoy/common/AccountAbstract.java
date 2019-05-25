@@ -1,4 +1,4 @@
-package com.toy.springboottoy.account;
+package com.toy.springboottoy.common;
 
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.AuthProvider;
@@ -10,11 +10,11 @@ import java.util.HashSet;
 
 public class AccountAbstract {
 
-    public static Account getUser() {
+    public static Account existUser() {
         return Account.builder()
-                .name("juyoung")
+                .name("user")
                 .email("user@gmail.com")
-                .password("password")
+                .password("pass")
                 .roleType(RoleType.USER)
                 .state(true)
                 .emailVerified(true)
@@ -26,9 +26,9 @@ public class AccountAbstract {
         return new HashSet<>(Arrays.asList(providers));
     }
 
-    public static SignUpRequest accountReqOf(String userName,
-                                             String email) {
-        String password = "password";
+    public static SignUpRequest accountReqUserOf(String userName,
+                                                 String email) {
+        String password = "pass";
         RoleType roleType = RoleType.USER;
         return accountReqOf(userName, password, email, true, roleType);
     }
@@ -36,7 +36,7 @@ public class AccountAbstract {
     public static SignUpRequest accountReqOf(String userName,
                                                     String email,
                                                     RoleType roleType) {
-        String password = "password";
+        String password = "pass";
         return accountReqOf(userName, password, email, true, roleType);
     }
 

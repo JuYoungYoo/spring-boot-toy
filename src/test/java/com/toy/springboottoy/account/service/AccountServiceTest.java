@@ -2,7 +2,7 @@ package com.toy.springboottoy.account.service;
 
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.RoleType;
-import com.toy.springboottoy.account.model.AccountDto;
+import com.toy.springboottoy.account.exception.EmailDuplicationException;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
 import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.account.reepository.AccountRepository;
@@ -12,12 +12,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
-import static com.toy.springboottoy.account.AccountAbstract.accountOf;
-import static com.toy.springboottoy.account.AccountAbstract.accountReqOf;
+import static com.toy.springboottoy.common.AccountAbstract.accountOf;
+import static com.toy.springboottoy.common.AccountAbstract.accountReqOf;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -30,8 +31,10 @@ public class AccountServiceTest {
     private AccountService accountService;
     @Mock
     private AccountRepository accountRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = EmailDuplicationException.class)
     @TestDescription("이메일 중복일 경우 회원가입 실패")
     public void duplicate_Email() {
         String userName = "juyoung";
@@ -68,10 +71,10 @@ public class AccountServiceTest {
         Account expected = accountOf("juyoung", "password", email);
         given(accountRepository.findById(id)).willReturn(Optional.of(expected));
 
-        AccountDto.Res account = accountService.findById(id);
+        Account result = accountService.findById(id);
 
-        assertThat(account).isNotNull();
-        assertThat(account.getEmail()).isEqualTo(email);
+        assertThat(result).isNotNull();
+        assertThat(result.getEmail()).isEqualTo(email);
     }
 
     @Test(expected = AccountNotFoundException.class)

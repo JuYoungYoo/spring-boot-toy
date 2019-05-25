@@ -1,7 +1,6 @@
 package com.toy.springboottoy.account.reepository;
 
 import com.toy.springboottoy.account.domain.Account;
-import com.toy.springboottoy.account.model.SessionDto;
 import com.toy.springboottoy.common.TestDescription;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
-import static com.toy.springboottoy.account.AccountAbstract.accountOf;
+import static com.toy.springboottoy.common.AccountAbstract.accountOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -28,7 +27,7 @@ public class AccountRepositoryTest {
 
     @Before
     public void setUp() {
-        account = accountOf("juyoung", "juyoung@gmail.com", "password");
+        account = accountOf("juyoung", "juyoung@gmail.com", "pass");
     }
 
     @Test
@@ -38,7 +37,6 @@ public class AccountRepositoryTest {
         String email = account.getEmail();
 
         Account newAccount = accountRepository.save(account);
-
 
         assertThat(newAccount.getName()).isEqualTo(userName);
         assertThat(newAccount.getEmail()).isEqualTo(email);
@@ -70,16 +68,4 @@ public class AccountRepositoryTest {
         assertThat(account).isNotEmpty();
     }
 
-    @Test
-    @TestDescription("계정이 존재할 때 성공한다")
-    public void findByEmailAndPassword_Success() {
-        String email = "user@gmail.com";
-        String password = "password";
-
-        Optional<SessionDto.SignInRes> findSessionRes = accountRepository.findByEmailAndPassword(email, password);
-        SessionDto.SignInRes sessionRes = findSessionRes.get();
-
-        assertThat(sessionRes.getEmail()).isEqualTo(email);
-        assertThat(sessionRes.getRoleType()).isNotNull();
-    }
 }

@@ -1,3 +1,4 @@
+/*
 package com.toy.springboottoy.account.controller;
 
 import com.toy.springboottoy.account.model.SignInRequest;
@@ -23,7 +24,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/session")
 public class SessionController {
 
-    /*
+    */
+/*
     @PostMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,5 +44,7 @@ public class SessionController {
 
         return new JwtAuthenticationResponse(token);
     }
-    */
+    *//*
+
 }
+*/

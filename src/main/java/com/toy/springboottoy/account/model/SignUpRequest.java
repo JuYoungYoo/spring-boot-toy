@@ -26,8 +26,8 @@ public class SignUpRequest {
     @NotEmpty
     private String email;
     @Enumerated(value = EnumType.STRING)
-    private RoleType roleType = RoleType.USER;
-    private boolean emailVerified = true;
+    private RoleType roleType;
+    private boolean emailVerified;
 
     @Builder
     public SignUpRequest(@NotEmpty String name,
