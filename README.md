@@ -3,7 +3,10 @@
 - [x] 로그인/로그아웃 (매니저)
 ---
 - [ ] 회원가입 (매니저)
-- [ ] 매니저 내 정보 (비번변경, 회원탈퇴, 프로필(업로드 및 썸네일)) 
+- [ ] 매니저 내 정보 
+    - 비번변경, 
+    - 회원탈퇴, 
+    - 프로필(업로드 및 썸네일) 
 ---
 - [ ] 음식점 리스트, 페이징
 - [ ] 음식점 정렬 (랭킹순, 리뷰개수순, 평점순 등)
@@ -25,9 +28,25 @@
 ----
 
 
+__[Modeling]__
+Account
+- name
+- password
+- email (식별자)
+- emailVerified 
+- state
+- roleType  
+- imgProfile url
 
-
-
+- img 
+    - URL
+    - filename
+    - size?
+    - type?
+  
+model 
+- imgRegisterRequest
+    - multipart
 
 
 

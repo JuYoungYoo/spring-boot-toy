@@ -27,7 +27,7 @@ public class AccountRepositoryTest {
 
     @Before
     public void setUp() {
-        account = accountOf("juyoung", "juyoung@gmail.com", "pass");
+        account = accountOf("juyoung", "juyoung@gmail.com");
     }
 
     @Test

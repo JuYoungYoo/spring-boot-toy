@@ -11,26 +11,19 @@ public class AccountAbstract {
 
     public static Account existUser() {
         return Account.builder()
-                .name("user")
-                .email("user@gmail.com")
+                .name("manager")
+                .email("manager@gmail.com")
                 .password("pass")
-                .roleType(RoleType.USER)
+                .roleType(RoleType.MANAGER)
                 .state(true)
                 .emailVerified(true)
                 .build();
     }
 
-    public static SignUpRequest accountReqUserOf(String userName,
-                                                 String email) {
-        String password = "pass";
-        RoleType roleType = RoleType.USER;
-        return accountReqOf(userName, password, email, true, roleType);
-    }
-
     public static SignUpRequest accountReqOf(String userName,
-                                                    String email,
-                                                    RoleType roleType) {
+                                             String email) {
         String password = "pass";
+        RoleType roleType = RoleType.MANAGER;
         return accountReqOf(userName, password, email, true, roleType);
     }
 
@@ -49,26 +42,18 @@ public class AccountAbstract {
     }
 
     public static Account accountOf(String userName,
-                                    String password,
                                     String email) {
-        return setAccount(userName, password, email, RoleType.USER);
-    }
-
-    public static Account accountOf(String userName,
-                                    String email,
-                                    RoleType roleType) {
-        return setAccount(userName, "password", email, roleType);
+        return setAccount(userName, "pass", email);
     }
 
     private static Account setAccount(String userName,
                                       String password,
-                                      String email,
-                                      RoleType roleType) {
+                                      String email) {
         return Account.builder()
                 .name(userName)
                 .password(password)
                 .email(email)
-                .roleType(roleType)
+                .roleType(RoleType.MANAGER)
                 .emailVerified(true)
                 .state(false)
                 .build();

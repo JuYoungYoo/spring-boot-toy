@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AccountService {
 
-    private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AccountRepository accountRepository;
 
     public Account signUp(SignUpRequest signUpRequest) {
         String email = signUpRequest.getEmail();

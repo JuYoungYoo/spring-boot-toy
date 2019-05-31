@@ -11,9 +11,8 @@ import org.junit.Test;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
 
-import static com.toy.springboottoy.common.AccountAbstract.accountReqUserOf;
+import static com.toy.springboottoy.common.AccountAbstract.accountReqOf;
 import static com.toy.springboottoy.common.AccountAbstract.existUser;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -55,7 +54,7 @@ public class AccountControllerTest extends BaseControllerTest {
     @TestDescription("회원가입 정상 데이터 받을 때 성공")
     public void createAccount_For_Chef_Success() throws Exception {
         String userName = "juyoung";
-        SignUpRequest newAccount = accountReqUserOf(userName, "juyoung@gamil.com");
+        SignUpRequest newAccount = accountReqOf(userName, "juyoung@gamil.com");
 
         mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -70,15 +69,14 @@ public class AccountControllerTest extends BaseControllerTest {
     @TestDescription("유저 회원가입 정상 데이터 받을 때 성공")
     public void createAccount_For_User_Success() throws Exception {
         String userName = "juyoung";
-        SignUpRequest newAccount = accountReqUserOf(userName, "juyoung@gamil.com");
+        SignUpRequest newAccount = accountReqOf(userName, "juyoung@gamil.com");
 
         mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(newAccount)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").value(Matchers.not(0)))
-                .andExpect(jsonPath("roleType").value(Matchers.is(RoleType.USER.name())));
+                .andExpect(jsonPath("id").value(Matchers.not(0)));
     }
 
     @Test
@@ -103,7 +101,7 @@ public class AccountControllerTest extends BaseControllerTest {
     @Test
     @TestDescription("Id에 해당하는 유저정보를 반환한다")
     public void getAccount_Info() throws Exception {
-        long id = 2L;
+        long id = 1L;
         Account expected = existUser();
 
         mockMvc.perform(get("/users/" + id)
@@ -113,8 +111,7 @@ public class AccountControllerTest extends BaseControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("name").value(expected.getName()))
-                .andExpect(jsonPath("email").value(expected.getEmail()))
-                .andExpect(jsonPath("roleType").value(expected.getRoleType().name()));
+                .andExpect(jsonPath("email").value(expected.getEmail()));
     }
 
     @Test
@@ -128,40 +125,5 @@ public class AccountControllerTest extends BaseControllerTest {
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void getAccount_success_by_role_user() throws Exception {
-        long id = 2L;
-        Account expected = existUser();
-
-        mockMvc.perform(get("/users/" + id)
-                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaTypes.HAL_JSON)
-        )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("name").value(expected.getName()))
-                .andExpect(jsonPath("email").value(expected.getEmail()))
-                .andExpect(jsonPath("roleType").value(expected.getRoleType().name()));
-    }
-
-    @Test
-    public void getAccount_success_by_role_manager() throws Exception {
-        long id = 2L;
-
-        performUserMockMvc(id)
-                .andDo(print())
-                .andExpect(status().isForbidden())
-        ;
-    }
-
-    private ResultActions performUserMockMvc(final long id) throws Exception {
-        return mockMvc.perform(get("/users/" + id)
-                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaTypes.HAL_JSON)
-        );
     }
 }

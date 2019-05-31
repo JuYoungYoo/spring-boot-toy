@@ -39,9 +39,8 @@ public class AccountServiceTest {
     public void duplicate_Email() {
         String userName = "juyoung";
         String email = "juyoung@gmail.com";
-        RoleType roleType = RoleType.USER;
 
-        SignUpRequest account = accountReqOf(userName, email, roleType);
+        SignUpRequest account = accountReqOf(userName, email);
 
         given(accountRepository.existsByEmail(any())).willReturn(true);
         accountService.signUp(account);
@@ -55,9 +54,9 @@ public class AccountServiceTest {
         RoleType roleType = RoleType.USER;
 
         given(accountRepository.existsByEmail(any())).willReturn(false);
-        given(accountRepository.save(any())).willReturn(accountOf(userName, email, roleType));
+        given(accountRepository.save(any())).willReturn(accountOf(userName, email));
 
-        Account newAccount = accountService.signUp(accountReqOf(userName, email, roleType));
+        Account newAccount = accountService.signUp(accountReqOf(userName, email));
 
         assertThat(newAccount.getName()).isEqualTo(userName);
         assertThat(newAccount.getRoleType()).isEqualTo(roleType);
@@ -68,7 +67,7 @@ public class AccountServiceTest {
     public void findById_Success() {
         Long id = 1L;
         String email = "user@gmail.com";
-        Account expected = accountOf("juyoung", "password", email);
+        Account expected = accountOf("juyoung", email);
         given(accountRepository.findById(id)).willReturn(Optional.of(expected));
 
         Account result = accountService.findById(id);
