@@ -5,15 +5,19 @@ import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.account.service.AccountService;
 import com.toy.springboottoy.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 
+@Slf4j
 @Component
+@EnableJpaAuditing
 @RequiredArgsConstructor
-public class InitComponent implements ApplicationRunner {
+public class DataInitializer implements ApplicationRunner {
 
     private final AppProperties appProperties;
     private final AccountService accountService;
@@ -22,6 +26,7 @@ public class InitComponent implements ApplicationRunner {
     @Transactional
     @Override
     public void run(ApplicationArguments args) {
+        log.debug("Initializing user data...");
         setFixtureAccount("manager", appProperties.getUserId(), appProperties.getUserPassword(), RoleType.MANAGER);
     }
 
@@ -41,5 +46,6 @@ public class InitComponent implements ApplicationRunner {
         } catch (Exception e) {
             accountService.signUp(account);
         }
+        log.debug("Init insert user : " + account.toString());
     }
 }
