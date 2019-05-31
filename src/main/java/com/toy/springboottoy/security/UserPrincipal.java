@@ -1,4 +1,4 @@
-package com.toy.springboottoy.security.model;
+package com.toy.springboottoy.security;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,7 +27,6 @@ public class UserPrincipal implements UserDetails {
 
     public static UserPrincipal of(Account account) {
         List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_" + account.getRoleType().name()));
-
         return new UserPrincipal(
                 account.getId(),
                 account.getEmail(),

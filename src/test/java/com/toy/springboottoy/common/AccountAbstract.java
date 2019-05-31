@@ -1,7 +1,6 @@
 package com.toy.springboottoy.common;
 
 import com.toy.springboottoy.account.domain.Account;
-import com.toy.springboottoy.account.domain.AuthProvider;
 import com.toy.springboottoy.account.domain.RoleType;
 import com.toy.springboottoy.account.model.SignUpRequest;
 
@@ -18,12 +17,7 @@ public class AccountAbstract {
                 .roleType(RoleType.USER)
                 .state(true)
                 .emailVerified(true)
-                .provider(getAuthProviders(AuthProvider.local))
                 .build();
-    }
-
-    private static HashSet<AuthProvider> getAuthProviders(AuthProvider... providers) {
-        return new HashSet<>(Arrays.asList(providers));
     }
 
     public static SignUpRequest accountReqUserOf(String userName,

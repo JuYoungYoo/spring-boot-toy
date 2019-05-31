@@ -1,8 +1,6 @@
 package com.toy.springboottoy.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.toy.springboottoy.config.AppProperties;
-import com.toy.springboottoy.config.AuthProperties;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -39,14 +37,14 @@ public class BaseControllerTest {
 
     protected String CLIENT_ID;
     protected String CLIENT_SECRET;
-    protected String USER_NAME;
+    protected String USER_ID;
     protected String USER_PASSWORD;
 
     @Before
     public void setUp() {
         CLIENT_ID = authProperties.getClientId();
         CLIENT_SECRET = authProperties.getClientSecret();
-        USER_NAME = appProperties.getUserId();
+        USER_ID = appProperties.getUserId();
         USER_PASSWORD = appProperties.getUserPassword();
     }
 
@@ -63,5 +61,4 @@ public class BaseControllerTest {
         String access_token = parser.parseMap(response).get("access_token").toString();
         return "Bearer " + access_token;
     }
-
 }

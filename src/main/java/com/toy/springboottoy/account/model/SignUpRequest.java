@@ -1,7 +1,6 @@
 package com.toy.springboottoy.account.model;
 
 import com.toy.springboottoy.account.domain.Account;
-import com.toy.springboottoy.account.domain.AuthProvider;
 import com.toy.springboottoy.account.domain.RoleType;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,7 +53,6 @@ public class SignUpRequest {
                 .roleType(roleType)
                 .emailVerified(emailVerified)
                 .state(true)
-                .provider(new HashSet<>(Arrays.asList(AuthProvider.local)))
                 .build();
     }
 }

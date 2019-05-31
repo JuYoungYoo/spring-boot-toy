@@ -16,16 +16,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        prePostEnabled = true
-)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     @Bean
     @Override
@@ -52,8 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .csrf().disable()
                     .cors().disable()
                 .authorizeRequests()
-                    .anyRequest()
-                        .authenticated()
+                .and()
+                .formLogin();
         ;
     }
 

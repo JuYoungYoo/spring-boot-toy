@@ -1,37 +1,47 @@
 # 음식점 예약 시스템 API 구현 : 비즈니스
-
- - 회원가입 (유저, 요리사)
- - 로그인 (유저, 요리사)
- - 유저 내 정보 (비번변경, 로그아웃, 회원탈퇴, 프로필(업로드 및 썸네일))
- - 요리사 내 정보 (비번변경, 로그아웃, 회원탈퇴, 프로필(업로드 및 썸네일)) - 예약 리스트 (유저)
- - 예약 (유저)(시간 당, 요리사별 한명만 가능하다고 가정)
- - 예약 수락 (요리사)
- - 예약 거절 (요리사)
- - 예약 수락을 20분 이상 하지 않을 시, 자동 거절
- - 예약 취소 (유저)
- - 음식점 리스트, 페이징
- - 음식점 정렬 (랭킹순, 리뷰개수순, 평점순 등)
- - 음식점 필터 (음식점 카테고리(한식, 중식, 일식 등등))
- - 음식점 검색 (이름, 요리사 이름)
- - 리뷰 리스트 (리스트 페이징)
- - 리뷰 쓰기/수정 (유저)
- - 리뷰 조회수
- - 리뷰 추천 (유저)
- - 리뷰 댓글 (유저, 요리사)
- - 리뷰 대댓글 (유저, 요리사)
- - 리뷰 검색
- - 유저 랭킹 (리뷰개수와 추천으로 적절하게 랭킹설계)
- - 요리사 랭킹 (리뷰개수와 평점으로 적절하게 랭킹설계)
- 
+---
+- [x] 로그인/로그아웃 (매니저)
+---
+- [ ] 회원가입 (매니저)
+- [ ] 매니저 내 정보 (비번변경, 회원탈퇴, 프로필(업로드 및 썸네일)) 
+---
+- [ ] 음식점 리스트, 페이징
+- [ ] 음식점 정렬 (랭킹순, 리뷰개수순, 평점순 등)
+- [ ] 음식점 필터 (음식점 카테고리(한식, 중식, 일식 등등))
+- [ ] 음식점 검색 (이름)
+---
+- [ ] 예약 리스트 (유저)
+- [ ] 예약 (유저) (시간 당, 매니저별 한명만 가능하다고 가정)
+- [ ] 예약 수락 (매니저)
+- [ ] 예약 거절 (매니저)
+- [ ] 예약 수락을 20분 이상 하지 않을 시, 자동 거절
+- [ ] 예약 취소 (유저)
+--- 
+- [ ] 요리사 랭킹 (리뷰개수와 평점으로 적절하게 랭킹설계)
+- [ ] 리뷰 검색
+- [ ] 리뷰 리스트 (리스트 페이징)
+- [ ] 리뷰 조회수
+- [ ] 리뷰 댓글 (매니저)
 ----
+
+
+
+
+
+
+
+
+
+
+
 (공통)
 - 잘못된 입력값 받을 시 Bad Request
 - 불필요한 값은 무시한다.
 
-
 - GET    : /session/new gets the webpage that has the login form
-- POST   : / session authenticates credentials against database
+- POST   : /session authenticates credentials against database
 - DELETE : /session destroys session and redirect to /
+
 - GET   : /users/new gets the webpage that has the registration form
 - POST  : /users records the entered information into database as a new /user/xxx
 - GET   : /users/xxx // gets and renders current user data in a profile view

@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static com.toy.springboottoy.common.AccountAbstract.accountReqUserOf;
 import static com.toy.springboottoy.common.AccountAbstract.existUser;
@@ -106,7 +107,7 @@ public class AccountControllerTest extends BaseControllerTest {
         Account expected = existUser();
 
         mockMvc.perform(get("/users/" + id)
-                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_NAME, USER_PASSWORD))
+                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
@@ -122,10 +123,45 @@ public class AccountControllerTest extends BaseControllerTest {
         long noneId = 9999L;
 
         mockMvc.perform(get("/users/" + noneId)
-                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_NAME, USER_PASSWORD))
+                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getAccount_success_by_role_user() throws Exception {
+        long id = 2L;
+        Account expected = existUser();
+
+        mockMvc.perform(get("/users/" + id)
+                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON)
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").value(expected.getName()))
+                .andExpect(jsonPath("email").value(expected.getEmail()))
+                .andExpect(jsonPath("roleType").value(expected.getRoleType().name()));
+    }
+
+    @Test
+    public void getAccount_success_by_role_manager() throws Exception {
+        long id = 2L;
+
+        performUserMockMvc(id)
+                .andDo(print())
+                .andExpect(status().isForbidden())
+        ;
+    }
+
+    private ResultActions performUserMockMvc(final long id) throws Exception {
+        return mockMvc.perform(get("/users/" + id)
+                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON)
+        );
     }
 }

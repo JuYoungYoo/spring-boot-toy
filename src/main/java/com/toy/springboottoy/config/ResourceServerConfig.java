@@ -14,7 +14,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(final ResourceServerSecurityConfigurer resources) {
-        resources.resourceId("account");
+        resources.resourceId("api");
     }
 
     @Override

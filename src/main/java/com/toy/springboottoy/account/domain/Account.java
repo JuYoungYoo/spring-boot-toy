@@ -32,9 +32,6 @@ public class Account {
     private boolean state;
     private String providerId;
     @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(value = EnumType.STRING)
-    private Set<AuthProvider> provider;
-
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -48,14 +45,12 @@ public class Account {
                    String email,
                    RoleType roleType,
                    boolean emailVerified,
-                   Set<AuthProvider> provider,
                    boolean state) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.roleType = roleType;
         this.emailVerified = emailVerified;
-        this.provider = provider;
         this.state = state;
     }
 }

@@ -6,6 +6,7 @@ import com.toy.springboottoy.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,4 +29,6 @@ public class AccountController {
     public Account signUp(@RequestBody @Valid final SignUpRequest signUpRequest) {
         return accountService.signUp(signUpRequest);
     }
+
+
 }
