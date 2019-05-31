@@ -1,7 +1,6 @@
 package com.toy.springboottoy.config;
 
 import com.toy.springboottoy.common.AppProperties;
-import com.toy.springboottoy.common.AuthProperties;
 import com.toy.springboottoy.common.TestDescription;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,14 +30,12 @@ public class SecurityConfigTest {
     private MockMvc mockMvc;
     @Autowired
     private AppProperties appProperties;
-    @Autowired
-    private AuthProperties authProperties;
 
     @Test
     @TestDescription("토큰을 생성한다")
     public void login() throws Exception {
         mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(authProperties.getClientId(), authProperties.getClientSecret()))
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
                 .param("username", appProperties.getUserId())
                 .param("password", appProperties.getUserPassword())
                 .param("grant_type", "password"))
@@ -68,7 +65,7 @@ public class SecurityConfigTest {
 
     private String obtainToken(String userName, String password) throws Exception {
         ResultActions perform = mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(authProperties.getClientId(), authProperties.getClientSecret()))
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
                 .param("username", userName)
                 .param("password", password)
                 .param("grant_type", "password"));

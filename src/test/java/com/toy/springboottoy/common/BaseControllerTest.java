@@ -32,8 +32,6 @@ public class BaseControllerTest {
     protected ObjectMapper objectMapper;
     @Autowired
     protected AppProperties appProperties;
-    @Autowired
-    protected AuthProperties authProperties;
 
     protected String CLIENT_ID;
     protected String CLIENT_SECRET;
@@ -42,8 +40,8 @@ public class BaseControllerTest {
 
     @Before
     public void setUp() {
-        CLIENT_ID = authProperties.getClientId();
-        CLIENT_SECRET = authProperties.getClientSecret();
+        CLIENT_ID = appProperties.getClientId();
+        CLIENT_SECRET = appProperties.getClientSecret();
         USER_ID = appProperties.getUserId();
         USER_PASSWORD = appProperties.getUserPassword();
     }

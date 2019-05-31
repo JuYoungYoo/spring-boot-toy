@@ -2,7 +2,6 @@ package com.toy.springboottoy.config.live;
 
 import com.toy.springboottoy.common.TestDescription;
 import com.toy.springboottoy.common.AppProperties;
-import com.toy.springboottoy.common.AuthProperties;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
@@ -23,8 +22,6 @@ import static org.hamcrest.Matchers.equalTo;
 public class RestSecurityTest {
     @Autowired
     AppProperties appProperties;
-    @Autowired
-    AuthProperties authProperties;
 
     @Before
     public void setup() {
@@ -58,7 +55,7 @@ public class RestSecurityTest {
         given()
                 .auth()
                     .preemptive()
-                        .basic(authProperties.getClientId(), authProperties.getClientSecret())
+                .basic(appProperties.getClientId(), appProperties.getClientSecret())
                 .and()
                 .with().params(params)
                     .when()
@@ -78,7 +75,7 @@ public class RestSecurityTest {
                 given()
                         .auth()
                         .preemptive()
-                        .basic(authProperties.getClientId(), authProperties.getClientSecret())
+                        .basic(appProperties.getClientId(), appProperties.getClientSecret())
                         .and()
                         .with().params(params)
                         .when()

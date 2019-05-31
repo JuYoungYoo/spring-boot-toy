@@ -30,13 +30,11 @@ public class Account {
     private RoleType roleType;
     private boolean emailVerified;
     private boolean state;
-    private String providerId;
-    @ElementCollection(fetch = FetchType.EAGER)
     @CreatedDate
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    @Column(updatable = false)
+    private LocalDateTime createAt;
     @LastModifiedDate
-    @Column(name = "update_at", updatable = false)
+    @Column(updatable = false)
     private LocalDateTime updateAt;
 
     @Builder

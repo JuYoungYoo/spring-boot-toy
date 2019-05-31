@@ -10,14 +10,18 @@ import org.springframework.context.annotation.Configuration;
 import javax.validation.constraints.NotEmpty;
 import java.util.Map;
 
+@Getter
+@Setter
 @Configuration
 @ConfigurationProperties("my-app")
-@Getter @Setter
 public class AppProperties {
 
-    @Value("#{fixture.userId}")
+    @NotEmpty
     private String userId;
-    @Value("#{fixture.userPassword}")
+    @NotEmpty
     private String userPassword;
-
+    @NotEmpty
+    private String clientId;
+    @NotEmpty
+    private String clientSecret;
 }

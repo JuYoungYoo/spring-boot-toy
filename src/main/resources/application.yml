@@ -8,9 +8,7 @@ spring:
 
 # security
 my-app:
-  auth:
-    client-id: myApp
-    client-secret: secret
-  fixture:
-    user-id: manager@gmail.com
-    user-password: pass
+  clientId: myApp
+  client-secret: secret
+  user-id: manager@gmail.com
+  user-password: pass
