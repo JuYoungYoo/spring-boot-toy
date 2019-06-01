@@ -2,10 +2,10 @@
 ---
 - [x] 로그인/로그아웃 (매니저)
 ---
-- [ ] 회원가입 (매니저)
-- [ ] 매니저 내 정보 
-    - 비번변경, 
-    - 회원탈퇴, 
+- [x] 회원가입 
+- [x] 매니저 내 정보 
+    - [x] 비번변경  
+    - [x] 회원탈퇴 
     - 프로필(업로드 및 썸네일) 
 ---
 - [ ] 음식점 리스트, 페이징
@@ -38,24 +38,13 @@ Account
 - roleType  
 - imgProfile url
 
-- img 
-    - URL
-    - filename
-    - size?
-    - type?
-  
-model 
-- imgRegisterRequest
-    - multipart
-
-
-
 
 
 
 (공통)
 - 잘못된 입력값 받을 시 Bad Request
 - 불필요한 값은 무시한다.
+
 
 - GET    : /session/new gets the webpage that has the login form
 - POST   : /session authenticates credentials against database

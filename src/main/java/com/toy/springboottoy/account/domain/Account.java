@@ -1,21 +1,22 @@
 package com.toy.springboottoy.account.domain;
 
+import com.toy.springboottoy.account.model.AccountUpdateRequest;
 import com.toy.springboottoy.common.BaseAuditEntity;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.Path;
 import javax.validation.constraints.Email;
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collection;
 
-@Entity
 @Getter
+@Entity
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Account extends BaseAuditEntity {
+public class Account extends BaseAuditEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,4 +51,43 @@ public class Account extends BaseAuditEntity {
         this.emailVerified = emailVerified;
         this.state = state;
     }
+
+    public void changePassword(AccountUpdateRequest.ChangePassword updateRequest) {
+        password = updateRequest.getPassword();
+    }
+
+    public void disabled() {
+        state = false;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_" + roleType.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return state;
+    }
+
 }

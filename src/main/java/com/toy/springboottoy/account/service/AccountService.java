@@ -3,6 +3,7 @@ package com.toy.springboottoy.account.service;
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
 import com.toy.springboottoy.account.exception.EmailDuplicationException;
+import com.toy.springboottoy.account.model.AccountUpdateRequest;
 import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.account.reepository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,21 @@ public class AccountService {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException(id));
         return account;
+    }
+
+    public void changePassword(final long id,
+                               AccountUpdateRequest.ChangePassword changePasswordRequest) {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new AccountNotFoundException(id));
+        changePasswordRequest.encode(passwordEncoder);
+        account.changePassword(changePasswordRequest);
+        accountRepository.save(account);
+    }
+
+    public void deleteAccount(long id) {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new AccountNotFoundException(id));
+        account.disabled();
+        accountRepository.save(account);
     }
 }

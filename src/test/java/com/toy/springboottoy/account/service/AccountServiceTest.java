@@ -4,6 +4,7 @@ import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.RoleType;
 import com.toy.springboottoy.account.exception.EmailDuplicationException;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
+import com.toy.springboottoy.account.model.AccountUpdateRequest;
 import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.account.reepository.AccountRepository;
 import com.toy.springboottoy.common.TestDescription;
@@ -12,6 +13,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -30,9 +33,24 @@ public class AccountServiceTest {
     @InjectMocks
     private AccountService accountService;
     @Mock
-    private AccountRepository accountRepository;
-    @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private AccountRepository accountRepository;
+
+    @Test
+    public void change_password() {
+        Account account = accountOf("manager", "pass", "manager@gmail.com");
+
+        AccountUpdateRequest.ChangePassword updateRequest = AccountUpdateRequest.ChangePassword.builder()
+                .password("passchange")
+                .build();
+
+        given(accountRepository.findById(any())).willReturn(Optional.ofNullable(account));
+        account.changePassword(updateRequest);
+        given(accountRepository.save(account)).willReturn(account);
+
+        assertThat(passwordEncoder.matches(account.getPassword(), updateRequest.getPassword())).isTrue();
+    }
 
     @Test(expected = EmailDuplicationException.class)
     @TestDescription("이메일 중복일 경우 회원가입 실패")
@@ -51,7 +69,6 @@ public class AccountServiceTest {
     public void signUp_Success() {
         String userName = "juyoung";
         String email = "juyoung@gmail.com";
-        RoleType roleType = RoleType.USER;
 
         given(accountRepository.existsByEmail(any())).willReturn(false);
         given(accountRepository.save(any())).willReturn(accountOf(userName, email));
@@ -59,7 +76,6 @@ public class AccountServiceTest {
         Account newAccount = accountService.signUp(accountReqOf(userName, email));
 
         assertThat(newAccount.getName()).isEqualTo(userName);
-        assertThat(newAccount.getRoleType()).isEqualTo(roleType);
     }
 
     @Test

@@ -46,6 +46,12 @@ public class AccountAbstract {
         return setAccount(userName, "pass", email);
     }
 
+    public static Account accountOf(String userName,
+                                    String password,
+                                    String email) {
+        return setAccount(userName, "pass", email);
+    }
+
     private static Account setAccount(String userName,
                                       String password,
                                       String email) {

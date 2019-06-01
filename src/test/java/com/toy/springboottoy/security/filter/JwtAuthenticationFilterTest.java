@@ -4,7 +4,7 @@ package com.toy.springboottoy.security.filter;
 import com.toy.springboottoy.common.TestDescription;
 import com.toy.springboottoy.security.JwtTokenProvider;
 import com.toy.springboottoy.security.model.JwtAuthenticationResponse;
-import com.toy.springboottoy.security.UserPrincipal;
+import com.toy.springboottoy.security.UserInfo;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
