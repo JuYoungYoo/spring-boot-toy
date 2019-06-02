@@ -1,6 +1,7 @@
-package com.toy.springboottoy.config;
+package com.toy.springboottoy.config.live;
 
 import com.toy.springboottoy.common.TestDescription;
+import com.toy.springboottoy.common.AppProperties;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
@@ -19,35 +20,17 @@ import static org.hamcrest.Matchers.equalTo;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RestSecurityTest {
-
     @Autowired
     AppProperties appProperties;
-    @Autowired
-    AuthProperties authProperties;
 
     @Before
     public void setup() {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 8081;
-    }
-
-    @Test
-    public void 기본_path로_접근하면_index_html_호출된다() throws Exception {
-        given()
-                .when()
-                    .get("/login/oauth2/code/google")
-                .then()
-                    .log().all()
-                ;
+        RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.port = 8080;
     }
 
     @Test @TestDescription("외부 리소스에서 토큰으로 인증 통과한 후 리소스 접속에 성공한다")
     public void when_another_resources_authentization_succuess() {
-        Map<String, String> params = new HashMap<>();
-        params.put("grant_type", "password");
-        params.put("username", appProperties.getUserId());
-        params.put("password", appProperties.getUserPassword());
-
         given()
                 .auth()
                     .preemptive()
@@ -72,7 +55,7 @@ public class RestSecurityTest {
         given()
                 .auth()
                     .preemptive()
-                        .basic(authProperties.getClientId(), authProperties.getClientSecret())
+                .basic(appProperties.getClientId(), appProperties.getClientSecret())
                 .and()
                 .with().params(params)
                     .when()
@@ -92,7 +75,7 @@ public class RestSecurityTest {
                 given()
                         .auth()
                         .preemptive()
-                        .basic(authProperties.getClientId(), authProperties.getClientSecret())
+                        .basic(appProperties.getClientId(), appProperties.getClientSecret())
                         .and()
                         .with().params(params)
                         .when()

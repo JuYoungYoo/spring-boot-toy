@@ -15,7 +15,7 @@ spring:
 
 logging:
   level:
-#    org.hibernate.SQL: DEBUG
-    org.springframework.security: DEBUG
+    ROOT: DEBUG
+#    org.springframework.security: DEBUG
 #    org.hibernate.type.descriptor.sql: DEBUG
-    org.springframework.security.oauth2.jwt: DEBUG
+#    org.springframework.security.oauth2.jwt: DEBUG

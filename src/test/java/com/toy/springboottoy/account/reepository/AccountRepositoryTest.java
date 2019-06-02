@@ -1,6 +1,7 @@
 package com.toy.springboottoy.account.reepository;
 
 import com.toy.springboottoy.account.domain.Account;
+import com.toy.springboottoy.account.model.AccountUpdateRequest;
 import com.toy.springboottoy.common.TestDescription;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,13 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AccountRepositoryTest {
 
     private Account account;
-
     @Autowired
     AccountRepository accountRepository;
 
     @Before
     public void setUp() {
-        account = accountOf("juyoung", "juyoung@gmail.com", "pass");
+        account = accountOf("juyoung", "juyoung@gmail.com");
     }
 
     @Test

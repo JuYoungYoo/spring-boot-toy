@@ -1,7 +1,8 @@
 package com.toy.springboottoy.config;
 
-import com.toy.springboottoy.security.CustomUserDetailsService;
-import com.toy.springboottoy.security.jwt.CustomTokenEnhancer;
+import com.toy.springboottoy.common.AppProperties;
+import com.toy.springboottoy.security.CustomAccessTokenConverter;
+import com.toy.springboottoy.security.CustomTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,16 +28,13 @@ import java.util.Arrays;
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
-    PasswordEncoder passwordEncoder;
-
+    private AppProperties appProperties;
     @Autowired
-    AuthenticationManager authenticationManager;
-
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    CustomUserDetailsService customUserDetailsService;
-
+    private AuthenticationManager authenticationManager;
     @Autowired
-    AuthProperties authProperties;
+    CustomAccessTokenConverter customAccessTokenConverter;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -59,7 +57,10 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         final TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
         tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverter()));
-        endpoints.tokenStore(tokenStore()).tokenEnhancer(tokenEnhancerChain).authenticationManager(authenticationManager);
+        endpoints
+                .tokenStore(tokenStore())
+                .tokenEnhancer(tokenEnhancerChain)
+                .authenticationManager(authenticationManager);
     }
 
     @Bean
@@ -70,6 +71,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setAccessTokenConverter(customAccessTokenConverter);
         converter.setSigningKey("123");
         return converter;
     }
@@ -81,15 +83,12 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        // client 설정
         clients.inMemory()
-                .withClient(authProperties.getClientId())
+                .withClient(appProperties.getClientId())
+                .secret(passwordEncoder.encode(appProperties.getClientSecret()))
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token")
                 .scopes("read", "write")
-                .secret(passwordEncoder.encode(authProperties.getClientSecret()))
-                .accessTokenValiditySeconds(10 * 60) // 10 min
-                .refreshTokenValiditySeconds(6 * 10 * 60);;
-        ;
+                .accessTokenValiditySeconds(10 * 60)
+                .refreshTokenValiditySeconds(6 * 10 * 60);
     }
-
 }
