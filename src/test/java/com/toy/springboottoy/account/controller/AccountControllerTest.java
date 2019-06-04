@@ -23,26 +23,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AccountControllerTest extends BaseControllerTest {
 
-
-    @Test
-    @TestDescription("인증 정보 가져오기")
-    public void getAccountInfoByMe() throws Exception {
-        mockMvc.perform(get("/accounts/me")
-                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("email").value("manager@gmail.com"))
-                .andExpect(jsonPath("jti").exists())
-        ;
-    }
-
     @Test
     @TestDescription("회원탈퇴")
     public void disabledAccount() throws Exception {
-        long id = 1l;
-        mockMvc.perform(delete("/accounts/" + id)
-                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD))
-                .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(delete("/accounts")
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
                 .andExpect(status().isNoContent())
@@ -57,8 +42,8 @@ public class AccountControllerTest extends BaseControllerTest {
                 .password("changepass")
                 .build();
 
-        mockMvc.perform(patch("/accounts/" + id)
-                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD))
+        mockMvc.perform(patch("/accounts")
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(changePwdRequest)))
@@ -150,7 +135,7 @@ public class AccountControllerTest extends BaseControllerTest {
         Account expected = existUser();
 
         mockMvc.perform(get("/accounts/" + id)
-                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD))
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
@@ -165,7 +150,7 @@ public class AccountControllerTest extends BaseControllerTest {
         long noneId = 9999L;
 
         mockMvc.perform(get("/accounts/" + noneId)
-                .header(HttpHeaders.AUTHORIZATION, obtainToken(USER_ID, USER_PASSWORD))
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())

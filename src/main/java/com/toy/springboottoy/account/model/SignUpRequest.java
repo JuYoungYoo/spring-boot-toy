@@ -2,10 +2,7 @@ package com.toy.springboottoy.account.model;
 
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.RoleType;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EnumType;
@@ -15,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SignUpRequest {
 
@@ -39,20 +37,5 @@ public class SignUpRequest {
         this.email = email;
         this.roleType = roleType;
         this.emailVerified = emailVerified;
-    }
-
-    public void encodePassword(PasswordEncoder passwordEncoder){
-       password = passwordEncoder.encode(password);
-    }
-
-    public Account toEntity() {
-        return Account.builder()
-                .name(name)
-                .email(email)
-                .password(password)
-                .roleType(roleType)
-                .emailVerified(emailVerified)
-                .state(true)
-                .build();
     }
 }

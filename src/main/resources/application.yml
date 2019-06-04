@@ -2,13 +2,60 @@ spring:
   profiles:
     active: local
 
-  devtools:
-    livereload:
-      enabled: true
-
-# security
 my-app:
   clientId: myApp
   client-secret: secret
   user-id: manager@gmail.com
   user-password: pass
+jpa:
+  hibernate:
+    ddl-auto: create-drop
+  format_sql: true
+  show-sql: true
+  open-in-view: false
+  properties:
+    hibernate:
+      show_seq: true
+      format_sql: true
+logging:
+  level:
+    ROOT: INFO
+    org.hibernate.SQL: DEBUG
+    org.springframework.security: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+---
+spring:
+  profiles: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/toy
+    username: juyoung
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    format_sql: true
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        show_seq: true
+        format_sql: true
+
+
+---
+spring:
+  profiles: init
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/toy
+    username: juyoung
+    password: pass
+    initialization-mode: always
+    platform: oauth2

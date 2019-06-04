@@ -1,55 +1,49 @@
 package com.toy.springboottoy.account.controller;
 
+import com.toy.springboottoy.account.CurrentUser;
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.model.AccountUpdateRequest;
 import com.toy.springboottoy.account.model.SignUpRequest;
 import com.toy.springboottoy.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/accounts", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
+@RequestMapping(value = "/accounts", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 public class AccountController {
 
     private final AccountService accountService;
+    private final ModelMapper modelMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Account signUp(@RequestBody @Valid final SignUpRequest signUpRequest) {
-        return accountService.signUp(signUpRequest);
+        Account account = modelMapper.map(signUpRequest, Account.class);
+        return accountService.signUp(account);
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Account getAccountInfo(@PathVariable final long id) {
+    public Account getAccount(@PathVariable final long id) {
         return accountService.findById(id);
     }
 
-    @PatchMapping(value = "/{id}")
+    @PatchMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePassword(@PathVariable final long id,
+    public void changePassword(@CurrentUser Account account,
                                @RequestBody @Valid AccountUpdateRequest.ChangePassword changePwdRequest) {
-        accountService.changePassword(id, changePwdRequest);
+        accountService.changePassword(account.getId(), changePwdRequest);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAccount(@PathVariable final long id) {
-        accountService.deleteAccount(id);
-    }
-
-    @GetMapping(value = "/me")
-    public Map<String, Object> me(Authentication auth) {
-        OAuth2AuthenticationDetails oauthDetails = (OAuth2AuthenticationDetails) auth.getDetails();
-        Map<String, Object> details = (Map<String, Object>) oauthDetails.getDecodedDetails();
-        return details;
+    public void deleteAccount(@CurrentUser Account account) {
+        accountService.deleteAccount(account.getId());
     }
 }

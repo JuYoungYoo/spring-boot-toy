@@ -6,20 +6,25 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
-@Getter
 @Entity
+@Getter
+@Setter
 @EqualsAndHashCode(of = "id")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Account extends BaseAuditEntity implements UserDetails {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Account extends BaseAuditEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private long id;
     @Column(nullable = false)
     private String name;
@@ -35,59 +40,12 @@ public class Account extends BaseAuditEntity implements UserDetails {
     private boolean emailVerified;
     private boolean state;
 
-    @Builder
-    public Account(String name,
-                   String password,
-                   String email,
-                   RoleType roleType,
-                   String imgProfileUrl,
-                   boolean emailVerified,
-                   boolean state) {
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.roleType = roleType;
-        this.imgProfileUrl = imgProfileUrl;
-        this.emailVerified = emailVerified;
-        this.state = state;
-    }
 
-    public void changePassword(AccountUpdateRequest.ChangePassword updateRequest) {
-        password = updateRequest.getPassword();
+    public void changePassword(AccountUpdateRequest.ChangePassword changePassword) {
+        this.password = changePassword.getPassword();
     }
 
     public void disabled() {
         state = false;
     }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_" + roleType.name()));
-    }
-
-    @Override
-    public String getUsername() {
-        return name;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return state;
-    }
-
 }

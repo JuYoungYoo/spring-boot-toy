@@ -1,8 +1,8 @@
 package com.toy.springboottoy.config;
 
-import com.toy.springboottoy.common.AppProperties;
-import com.toy.springboottoy.security.CustomAccessTokenConverter;
-import com.toy.springboottoy.security.CustomTokenEnhancer;
+import com.toy.springboottoy.account.service.AccountService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,80 +15,49 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenEnhancer;
-import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
-import java.util.Arrays;
+import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
+@RequiredArgsConstructor
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    private AppProperties appProperties;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    CustomAccessTokenConverter customAccessTokenConverter;
+    private final DataSource dataSource;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final AccountService accountService;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security
-                .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()")
                 .passwordEncoder(passwordEncoder);
-    }
-
-    @Bean
-    @Primary
-    public DefaultTokenServices tokenServices() {
-        final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore());
-        defaultTokenServices.setSupportRefreshToken(true);
-        return defaultTokenServices;
     }
 
     @Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        final TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverter()));
         endpoints
                 .tokenStore(tokenStore())
-                .tokenEnhancer(tokenEnhancerChain)
+                .userDetailsService(accountService)
                 .authenticationManager(authenticationManager);
     }
 
     @Bean
     public TokenStore tokenStore() {
-        return new JwtTokenStore(accessTokenConverter());
-    }
-
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setAccessTokenConverter(customAccessTokenConverter);
-        converter.setSigningKey("123");
-        return converter;
-    }
-
-    @Bean
-    public TokenEnhancer tokenEnhancer() {
-        return new CustomTokenEnhancer();
+        return new InMemoryTokenStore();
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient(appProperties.getClientId())
-                .secret(passwordEncoder.encode(appProperties.getClientSecret()))
-                .authorizedGrantTypes("password", "authorization_code", "refresh_token")
-                .scopes("read", "write")
+                .withClient("myApp")
+                .authorizedGrantTypes("password", "refresh_token")
+                .scopes("read", "write", "trust")
+                .secret(passwordEncoder.encode("secret"))
                 .accessTokenValiditySeconds(10 * 60)
-                .refreshTokenValiditySeconds(6 * 10 * 60);
+                .refreshTokenValiditySeconds(60 * 60);
     }
 }
