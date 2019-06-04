@@ -2,18 +2,12 @@ package com.toy.springboottoy.init;
 
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.RoleType;
-import com.toy.springboottoy.account.model.SignUpRequest;
-import com.toy.springboottoy.account.service.AccountService;
+import com.toy.springboottoy.account.AccountService;
 import com.toy.springboottoy.common.AppProperties;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.stereotype.Component;
-
-import javax.management.relation.Role;
-import javax.transaction.Transactional;
 
 @Slf4j
 @Component
@@ -38,7 +32,6 @@ public class DefaultUserInitializer implements ApplicationRunner {
                                    String email,
                                    String password,
                                    RoleType roleType) {
-
         Account account = Account.builder()
                 .name(name)
                 .email(email)
@@ -47,6 +40,7 @@ public class DefaultUserInitializer implements ApplicationRunner {
                 .emailVerified(true)
                 .build();
         accountService.signUp(account);
+
         log.debug("Init insert user : " + account.toString());
     }
 }

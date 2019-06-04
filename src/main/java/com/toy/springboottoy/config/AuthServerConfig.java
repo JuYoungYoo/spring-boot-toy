@@ -1,12 +1,9 @@
 package com.toy.springboottoy.config;
 
-import com.toy.springboottoy.account.service.AccountService;
+import com.toy.springboottoy.account.AccountService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -14,10 +11,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
 
@@ -26,7 +21,6 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    private final DataSource dataSource;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final AccountService accountService;
@@ -50,6 +44,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         return new InMemoryTokenStore();
     }
 
+    // todo : ? jdbc로 변경 방법 ( 테스트 고려해서 )
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()

@@ -1,5 +1,6 @@
 package com.toy.springboottoy.account.reepository;
 
+import com.toy.springboottoy.account.AccountRepository;
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.RoleType;
 import com.toy.springboottoy.common.TestDescription;
@@ -8,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 

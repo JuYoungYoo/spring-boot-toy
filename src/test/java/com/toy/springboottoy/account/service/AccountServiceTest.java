@@ -1,10 +1,11 @@
 package com.toy.springboottoy.account.service;
 
+import com.toy.springboottoy.account.AccountService;
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.RoleType;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
 import com.toy.springboottoy.account.exception.EmailDuplicationException;
-import com.toy.springboottoy.account.reepository.AccountRepository;
+import com.toy.springboottoy.account.AccountRepository;
 import com.toy.springboottoy.common.TestDescription;
 import com.toy.springboottoy.config.AppConfig;
 import org.junit.Test;
@@ -15,7 +16,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 

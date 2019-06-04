@@ -1,4 +1,4 @@
-package com.toy.springboottoy.account.reepository;
+package com.toy.springboottoy.account;
 
 import com.toy.springboottoy.account.domain.Account;
 import org.springframework.data.jpa.repository.JpaRepository;

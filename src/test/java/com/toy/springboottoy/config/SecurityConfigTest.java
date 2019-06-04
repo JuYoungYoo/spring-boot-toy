@@ -2,7 +2,7 @@ package com.toy.springboottoy.config;
 
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.RoleType;
-import com.toy.springboottoy.account.service.AccountService;
+import com.toy.springboottoy.account.AccountService;
 import com.toy.springboottoy.common.AppProperties;
 import com.toy.springboottoy.common.TestDescription;
 import org.junit.Test;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.context.ActiveProfiles;

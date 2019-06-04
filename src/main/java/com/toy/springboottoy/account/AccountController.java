@@ -1,10 +1,10 @@
-package com.toy.springboottoy.account.controller;
+package com.toy.springboottoy.account;
 
 import com.toy.springboottoy.account.CurrentUser;
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.model.AccountUpdateRequest;
 import com.toy.springboottoy.account.model.SignUpRequest;
-import com.toy.springboottoy.account.service.AccountService;
+import com.toy.springboottoy.account.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
