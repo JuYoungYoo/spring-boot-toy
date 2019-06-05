@@ -23,7 +23,13 @@ public class AccountService implements UserDetailsService {
     public Account signUp(Account account) {
         String email = account.getEmail();
         validateDuplicatedEmail(email);
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
+
+        AccountUpdateRequest.ChangePassword changePassword = AccountUpdateRequest.ChangePassword.builder()
+                .password(account.getPassword())
+                .build();
+        changePassword.encode(passwordEncoder);
+        account.changePassword(changePassword);
+
         return accountRepository.save(account);
     }
 

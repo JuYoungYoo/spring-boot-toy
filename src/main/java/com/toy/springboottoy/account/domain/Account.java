@@ -18,9 +18,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends BaseAuditEntity {
 
     @Id
@@ -40,6 +38,22 @@ public class Account extends BaseAuditEntity {
     private boolean emailVerified;
     private boolean state;
 
+    @Builder
+    public Account(String name,
+                   String password,
+                   @Email String email,
+                   RoleType roleType,
+                   String imgProfileUrl,
+                   boolean emailVerified,
+                   boolean state) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.roleType = roleType;
+        this.imgProfileUrl = imgProfileUrl;
+        this.emailVerified = emailVerified;
+        this.state = state;
+    }
 
     public void changePassword(AccountUpdateRequest.ChangePassword changePassword) {
         this.password = changePassword.getPassword();
