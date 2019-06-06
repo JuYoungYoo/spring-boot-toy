@@ -9,8 +9,8 @@
     - [x] 회원탈퇴 
     - 프로필(업로드 및 썸네일) 
 ---
-- [ ] 음식점 리스트, 페이징
-- [ ] 음식점 정렬 (랭킹순, 리뷰개수순, 평점순 등)
+- [ ] 음식점 리스트, 페이징      
+- [ ] ~~음식점 정렬 (랭킹순, 리뷰개수순, 평점순 등)~~
 - [ ] 음식점 필터 (음식점 카테고리(한식, 중식, 일식 등등))
 - [ ] 음식점 검색 (이름)
 ---
@@ -29,8 +29,8 @@
 ----
 
 
-__[Modeling]__
-Account
+#### Modeling
+__Account__
 - name
 - password
 - email (식별자)
@@ -38,6 +38,40 @@ Account
 - state
 - roleType  
 - imgProfile url
+
+
+#### 음식점 (store)
+
+- create
+- all
+- queryStores : pageable 
+- filter : category
+- searchStores : name 
+- sort : 추후 
+
+__Store__
+- 이름 : name
+- 카테고리 : CATEGORY
+- 위치 : location
+- 전화번호 : phoneNumber
+- 영업 시간 : openingHours / open close  
+- 세부 설명 : description 
+- 메뉴 : menu
+
+__category__
+Chinese, Japanese, Korean, Western, Fusion
+
+__Menu__
+List<Food>  
+
+__Food__
+name
+price
+imageUrl
+description 
+
+
+
 
 
 
