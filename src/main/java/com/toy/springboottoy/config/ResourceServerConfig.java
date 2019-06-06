@@ -30,6 +30,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/accounts").permitAll()
+                .antMatchers(HttpMethod.GET, "/stores").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
