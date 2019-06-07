@@ -3,16 +3,9 @@ package com.toy.springboottoy.account.domain;
 import com.toy.springboottoy.account.model.AccountUpdateRequest;
 import com.toy.springboottoy.common.BaseAuditEntity;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
 
 @Entity
 @Getter
@@ -22,7 +15,7 @@ import java.util.Collection;
 public class Account extends BaseAuditEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(nullable = false)
     private String name;
