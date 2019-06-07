@@ -1,21 +1,23 @@
 package com.toy.springboottoy.stores;
 
-import com.toy.springboottoy.empty.Menu;
+import com.toy.springboottoy.menus.Menu;
 import com.toy.springboottoy.stores.domain.OpeningHours;
 import com.toy.springboottoy.stores.domain.StoreCategory;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Store {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(unique = true, nullable = false)
     private String name;
@@ -27,9 +29,8 @@ public class Store {
     private OpeningHours openingHours;
     @Lob
     private String description;
-    @OneToOne
-    @JoinColumn(name = "menu_id", referencedColumnName = "id")
-    private Menu menu;
+    @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Menu> menus = new ArrayList<>();
 
     @Builder
     public Store(String name,
@@ -47,8 +48,8 @@ public class Store {
     }
 
     public void addMenu(final Menu menu) {
-        this.menu = menu;
-        menu.init(this);
+        menu.addStore(this);
+        menus.add(menu);
     }
 
 }

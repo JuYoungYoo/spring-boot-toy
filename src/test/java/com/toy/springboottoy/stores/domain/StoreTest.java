@@ -1,7 +1,7 @@
 package com.toy.springboottoy.stores.domain;
 
 import com.toy.springboottoy.common.TestDescription;
-import com.toy.springboottoy.empty.Menu;
+import com.toy.springboottoy.menus.Menu;
 import com.toy.springboottoy.stores.Store;
 import org.junit.Test;
 
@@ -52,7 +52,7 @@ public class StoreTest {
 
         Menu menu = Menu.builder().build();
         store.addMenu(menu);
-        assertThat(store.getMenu()).isNotNull();
-        assertThat(store.getMenu().getStore()).isNotNull();
+        assertThat(store.getMenus()).isNotNull();
+        assertThat(store.getMenus()).isNotNull();
     }
 }
