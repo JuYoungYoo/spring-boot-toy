@@ -33,30 +33,29 @@ public class BaseControllerTest {
     @Autowired
     protected AppProperties appProperties;
 
-    protected String CLIENT_ID;
-    protected String CLIENT_SECRET;
     protected String USER_ID;
     protected String USER_PASSWORD;
 
     @Before
     public void setUp() {
-        CLIENT_ID = appProperties.getClientId();
-        CLIENT_SECRET = appProperties.getClientSecret();
         USER_ID = appProperties.getUserId();
         USER_PASSWORD = appProperties.getUserPassword();
     }
 
-    protected String obtainToken(String userName,
-                                 String password) throws Exception {
+    protected String getBearerToken() throws Exception {
+        return "bearer " + obtainToken();
+    }
+
+    private String obtainToken() throws Exception {
         ResultActions perform = mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(CLIENT_ID, CLIENT_SECRET))
-                .param("username", userName)
-                .param("password", password)
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                .param("username", appProperties.getUserId())
+                .param("password", appProperties.getUserPassword())
                 .param("grant_type", "password"));
 
         String response = perform.andReturn().getResponse().getContentAsString();
         Jackson2JsonParser parser = new Jackson2JsonParser();
-        String access_token = parser.parseMap(response).get("access_token").toString();
-        return "Bearer " + access_token;
+
+        return parser.parseMap(response).get("access_token").toString();
     }
 }

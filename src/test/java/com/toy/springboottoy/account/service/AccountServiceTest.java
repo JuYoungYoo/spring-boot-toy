@@ -1,33 +1,34 @@
 package com.toy.springboottoy.account.service;
 
+import com.toy.springboottoy.account.AccountService;
 import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.RoleType;
-import com.toy.springboottoy.account.exception.EmailDuplicationException;
 import com.toy.springboottoy.account.exception.AccountNotFoundException;
-import com.toy.springboottoy.account.model.AccountUpdateRequest;
-import com.toy.springboottoy.account.model.SignUpRequest;
-import com.toy.springboottoy.account.reepository.AccountRepository;
+import com.toy.springboottoy.account.exception.EmailDuplicationException;
+import com.toy.springboottoy.account.AccountRepository;
 import com.toy.springboottoy.common.TestDescription;
+import com.toy.springboottoy.config.AppConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Description;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
-import static com.toy.springboottoy.common.AccountAbstract.accountOf;
-import static com.toy.springboottoy.common.AccountAbstract.accountReqOf;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ActiveProfiles("test")
 @RunWith(MockitoJUnitRunner.class)
+@Import(AppConfig.class)
 public class AccountServiceTest {
 
     @InjectMocks
@@ -38,64 +39,64 @@ public class AccountServiceTest {
     private AccountRepository accountRepository;
 
     @Test
-    public void change_password() {
-        Account account = accountOf("manager", "pass", "manager@gmail.com");
+    @Description("로그인 성공")
+    public void loadUserByUsername() {
+        Account account = account();
+        given(accountRepository.findByEmail(any())).willReturn(Optional.ofNullable(account));
+        UserDetails userDetails = accountService.loadUserByUsername(account.getEmail());
 
-        AccountUpdateRequest.ChangePassword updateRequest = AccountUpdateRequest.ChangePassword.builder()
-                .password("passchange")
-                .build();
-
-        given(accountRepository.findById(any())).willReturn(Optional.ofNullable(account));
-        account.changePassword(updateRequest);
-        given(accountRepository.save(account)).willReturn(account);
-
-        assertThat(passwordEncoder.matches(account.getPassword(), updateRequest.getPassword())).isTrue();
+        assertThat(userDetails.getUsername()).isEqualTo(account.getEmail());
+        assertThat(userDetails.getPassword()).isEqualTo(account.getPassword());
     }
 
     @Test(expected = EmailDuplicationException.class)
     @TestDescription("이메일 중복일 경우 회원가입 실패")
     public void duplicate_Email() {
-        String userName = "juyoung";
-        String email = "juyoung@gmail.com";
-
-        SignUpRequest account = accountReqOf(userName, email);
-
         given(accountRepository.existsByEmail(any())).willReturn(true);
-        accountService.signUp(account);
+        accountService.signUp(account());
     }
 
     @Test
     @TestDescription("회원가입 성공")
     public void signUp_Success() {
-        String userName = "juyoung";
-        String email = "juyoung@gmail.com";
+        Account account = account();
 
         given(accountRepository.existsByEmail(any())).willReturn(false);
-        given(accountRepository.save(any())).willReturn(accountOf(userName, email));
+        given(accountRepository.save(any())).willReturn(account);
 
-        Account newAccount = accountService.signUp(accountReqOf(userName, email));
+        Account newAccount = accountService.signUp(account);
 
-        assertThat(newAccount.getName()).isEqualTo(userName);
+        assertThat(newAccount).isNotNull();
+        assertThat(newAccount.getName()).isEqualTo(account.getName());
     }
 
     @Test
     @TestDescription("Id에 해당하는 계정정보 반환")
     public void findById_Success() {
-        Long id = 1L;
-        String email = "user@gmail.com";
-        Account expected = accountOf("juyoung", email);
-        given(accountRepository.findById(id)).willReturn(Optional.of(expected));
+        Account expectedAccount = account();
 
-        Account result = accountService.findById(id);
+        given(accountRepository.findById(anyLong())).willReturn(Optional.of(expectedAccount));
+        Account result = accountService.findById(1l);
 
         assertThat(result).isNotNull();
-        assertThat(result.getEmail()).isEqualTo(email);
+        assertThat(result).isEqualTo(expectedAccount);
     }
 
     @Test(expected = AccountNotFoundException.class)
     @TestDescription("id에 해당하는 계정이 없을 경우 에러")
     public void findById_Fail() {
         given(accountRepository.findById(any())).willReturn(Optional.empty());
-        accountService.findById(1L);
+        accountService.findById(23423423L);
+    }
+
+    private Account account() {
+        return Account.builder()
+                .name("user")
+                .email("user@gmail.com")
+                .password("pass")
+                .roleType(RoleType.MANAGER)
+                .state(true)
+                .emailVerified(true)
+                .build();
     }
 }

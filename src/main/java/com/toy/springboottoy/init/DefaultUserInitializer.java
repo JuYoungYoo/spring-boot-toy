@@ -1,29 +1,27 @@
-package com.toy.springboottoy.common;
+package com.toy.springboottoy.init;
 
+import com.toy.springboottoy.account.domain.Account;
 import com.toy.springboottoy.account.domain.RoleType;
-import com.toy.springboottoy.account.model.SignUpRequest;
-import com.toy.springboottoy.account.service.AccountService;
-import com.toy.springboottoy.security.CustomUserDetailsService;
-import lombok.RequiredArgsConstructor;
+import com.toy.springboottoy.account.AccountService;
+import com.toy.springboottoy.common.AppProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.stereotype.Component;
-
-import javax.transaction.Transactional;
 
 @Slf4j
 @Component
-@EnableJpaAuditing
-@RequiredArgsConstructor
-public class DataInitializer implements ApplicationRunner {
+public class DefaultUserInitializer implements ApplicationRunner {
 
     private final AppProperties appProperties;
     private final AccountService accountService;
-    private final CustomUserDetailsService customUserDetailsService;
 
-    @Transactional
+    public DefaultUserInitializer(AppProperties appProperties,
+                                  AccountService accountService) {
+        this.appProperties = appProperties;
+        this.accountService = accountService;
+    }
+
     @Override
     public void run(ApplicationArguments args) {
         log.debug("Initializing user data...");
@@ -34,18 +32,15 @@ public class DataInitializer implements ApplicationRunner {
                                    String email,
                                    String password,
                                    RoleType roleType) {
-        SignUpRequest account = SignUpRequest.builder()
+        Account account = Account.builder()
                 .name(name)
                 .email(email)
                 .password(password)
                 .roleType(roleType)
                 .emailVerified(true)
                 .build();
-        try {
-            customUserDetailsService.loadUserByUsername(email);
-        } catch (Exception e) {
-            accountService.signUp(account);
-        }
+        accountService.signUp(account);
+
         log.debug("Init insert user : " + account.toString());
     }
 }

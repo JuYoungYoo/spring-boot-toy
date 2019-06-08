@@ -40,28 +40,4 @@ public class AccountAbstract {
                 .roleType(roleType)
                 .build();
     }
-
-    public static Account accountOf(String userName,
-                                    String email) {
-        return setAccount(userName, "pass", email);
-    }
-
-    public static Account accountOf(String userName,
-                                    String password,
-                                    String email) {
-        return setAccount(userName, "pass", email);
-    }
-
-    private static Account setAccount(String userName,
-                                      String password,
-                                      String email) {
-        return Account.builder()
-                .name(userName)
-                .password(password)
-                .email(email)
-                .roleType(RoleType.MANAGER)
-                .emailVerified(true)
-                .state(false)
-                .build();
-    }
 }
